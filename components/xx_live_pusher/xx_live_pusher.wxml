@@ -1,7 +1,7 @@
 
 
 
-<!-- <view class='live' style='height: {{height}};' catchtap='showMenu'> -->
+ <view class='live' style='height: {{height}};' catchtap='showMenu'> 
   <live-pusher url="rtmp://video-center.alivecdn.com/AppName/StreamName?vhost=live.12xiong.top" 
     id="pusher"
     class="live_pusher"
@@ -13,8 +13,12 @@
     enable-camera="true"
     autopush="true"
     waiting-image="../../images/live_bg.jpg"
-    />
-<!-- </view> -->
+    catchtap='clickPusher'
+    >
+        <cover-image src='../../images/pusher_logo.png'></cover-image>
+    </live-pusher>
+ 
+ </view> 
 
 <view class='menu' hidden='{{!menu}}'>
     <template is="node_action" data='{{name:"切换摄像头",e:"switchCamera"}}'/>

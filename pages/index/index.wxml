@@ -1,21 +1,27 @@
 
- <view class='painter' hidden='{{!showRoom}}' style='height:100vh'>
+ <!-- <view class='painter' hidden='{{!showRoom}}' style='height:100vh'>
     <xx-painter height="calc(100vh - 50px )"
 catchcomplete="sendDraw" catchclear="sendClear" bg="{{bgImageUrl}}" drawLine="{{drawLine}}" tool="{{true}}"></xx-painter>  
-</view> 
+</view>  -->
 
-<view class='tab'>
-    <xx-tab list="{{playerTab}}" bind:click="clickTab" colorunselect="#888" colorselect="#efa234" mode="scroll" />
+<view class='stage' hidden='{{!showRoom}}'>
+    <image src='{{background.url}}' style='width: {{background.width}};height: {{background.height}};' mode='widthFix' catchtap='clickPusher'></image>
+    <!-- <view class='player_default' style='top: {{player.x}};left: {{player.y}};'>
+        <xx-live-player orientation="horizontal"  src="{{pusher.url}}" height="{{player.height}}" width="{{player.width}}">
+        </xx-live-player> 
+    </view> -->
+
+    <view class='pusher_default' style='top: {{pusher.y}};right: {{pusher.x}};' >
+        <xx-live-pusher src="{{appDict.pusher_url}}" width="{{pusher.width}}" height="{{pusher.height}}" menu="{{false}}" ></xx-live-pusher> 
+    </view>
+
 </view>
 
-<view class='default'>
-    <view class='player_default'>
-        <xx-live-player feedback="{{feedback}}"  src="{{appDict.player_url}}" height="80px" width="80px"></xx-live-player> 
-    </view>
+ <view class='tab'>
+    <xx-tab list="{{playerTab}}" bind:click="clickTab" colorunselect="#888" colorselect="#efa234" mode="scroll" />
+</view> 
 
-    <view class='pusher_default'>
-        <xx-live-pusher src="{{appDict.pusher_url}}" width="80px" height="80px" menu="{{false}}" ></xx-live-pusher> 
-    </view>
+<view class='default'>
 </view>
 <!-- <button size='mini' type='primary'>同步</button> -->
 

@@ -26,6 +26,12 @@ Component({
             value: true,
         },
 
+        // 屏幕方向
+        orientation: {
+          type: String,
+          value: "vertical",
+        },
+
   },
 
   /**
@@ -121,5 +127,19 @@ Component({
         console.error('live-player error:', e.detail.errMsg)
     },
 
+
+      showMenu(){
+          console.log(2132)
+      },
+    // 点击推流框
+    clickPusher(e) {
+        wx.showActionSheet({
+            itemList: ['转向'],
+            itemColor: '',
+            success: function (res) { },
+            fail: function (res) { },
+            complete: function (res) { },
+        })
+    },
   }
 })

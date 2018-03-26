@@ -20,17 +20,28 @@
     left:200px;
 }
 
+
+.stage{
+    position: relative;
+}
+
+.stage image{
+    position:absolute;
+}
+
 .default{
     display: flex;
     justify-content: space-around;
 }
 .player_default{
+    position:absolute;
     /* position: fixed;
     top:80px;
     left:100px; */
 }
 
 .pusher_default{
+    position:absolute;
     
     /* position: fixed;
     top:260px;

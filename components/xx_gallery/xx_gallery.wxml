@@ -1,5 +1,5 @@
 
-<block wx:for="{{list}}">
+<block wx:for="{{list}}" wx:key="index">
     <view class='xx_gride xx_m_t15'>
         <image catchtap='clickEmoji'  data-image_url="{{item.url}}"
         class='xx_gride__image' src='{{item.url}}' mode='aspectFit'  ></image>
