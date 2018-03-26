@@ -1,0 +1,38 @@
+/**index.wxss**/
+.tab{
+    margin-top:20px; 
+}
+.painter{
+    position: fixed;
+    width: 100%;
+}
+
+.player{
+    position: fixed;
+    top:80px;
+    left:100px;
+}
+
+.pusher{
+    
+    position: fixed;
+    top:260px;
+    left:200px;
+}
+
+.default{
+    display: flex;
+    justify-content: space-around;
+}
+.player_default{
+    /* position: fixed;
+    top:80px;
+    left:100px; */
+}
+
+.pusher_default{
+    
+    /* position: fixed;
+    top:260px;
+    left:200px; */
+}

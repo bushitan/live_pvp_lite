@@ -1,0 +1,24 @@
+
+ <view class='painter' hidden='{{!showRoom}}' style='height:100vh'>
+    <xx-painter height="calc(100vh - 50px )"
+catchcomplete="sendDraw" catchclear="sendClear" bg="{{bgImageUrl}}" drawLine="{{drawLine}}" tool="{{true}}"></xx-painter>  
+</view> 
+
+<view class='tab'>
+    <xx-tab list="{{playerTab}}" bind:click="clickTab" colorunselect="#888" colorselect="#efa234" mode="scroll" />
+</view>
+
+<view class='default'>
+    <view class='player_default'>
+        <xx-live-player feedback="{{feedback}}"  src="{{appDict.player_url}}" height="80px" width="80px"></xx-live-player> 
+    </view>
+
+    <view class='pusher_default'>
+        <xx-live-pusher src="{{appDict.pusher_url}}" width="80px" height="80px" menu="{{false}}" ></xx-live-pusher> 
+    </view>
+</view>
+<!-- <button size='mini' type='primary'>同步</button> -->
+
+<view hidden='{{showRoom}}'>
+    <xx-gallery catchchoice="sendPPT" list="{{pptList}}"  ></xx-gallery>
+</view>
