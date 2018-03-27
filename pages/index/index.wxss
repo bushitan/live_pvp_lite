@@ -47,3 +47,46 @@
     top:260px;
     left:200px; */
 }
+
+
+.preview{
+     padding-left:15px;  
+}
+
+.tool{
+    z-index: 999;
+
+}
+.new_heng{
+    position: fixed;
+    right: 10px;
+    bottom: 40px;
+}
+.cancel{
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+}
+.share_heng{
+    position: fixed;
+    left: 10px;
+    top: 40px;
+}
+.next_heng{
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+}
+.back_heng{
+    position: fixed;
+    left: 10px;
+    bottom: 40px;
+}
+.time_heng{
+    position: fixed;
+    right: 10px;
+    bottom: 80px;
+}
+
+
+/* .pay{ background-color: #fff;} */
