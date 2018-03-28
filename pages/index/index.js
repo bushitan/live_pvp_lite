@@ -3,6 +3,10 @@
 const APP = getApp()
 var API = require('../../utils/api.js');
 var Scripte = require('scripte.js');
+var JMessage = require('../../utils/im/jm.js')
+
+var teacher = "live_app_3"
+var student = 'live_pvp_user_5'
 var GP
 Page({
     data: {
@@ -15,6 +19,9 @@ Page({
         stage:{},//当前场景
         rol:0,
         col:0,
+
+        userName: "live_app_3",//老师
+        // userName:'live_pvp_user_5', //学生
         //页面显示
         show:{
             stage: false, //直播舞台
@@ -63,6 +70,13 @@ Page({
         // })
         console.log(GP.data.storyList[rol].list[col])
         GP.inStageTeacher()
+
+        var t_call = {
+            text: "stage",
+            stage: GP.data.stage
+        }
+        Scripte.sendSingleCustom(student, t_call)
+
     },
 
     /**
@@ -158,35 +172,26 @@ Page({
     },
 
 
+    /**
+     * IM系统
+     */
 
 
 
-
+    testTheme(){
+        Scripte.sendSingleCustom()
+    },
 
 
 
    
 
-    // 点击推流框
-    clickPusher(e){
-        // wx.showActionSheet({
-        //     itemList: ['转向'],
-        //     itemColor: '',
-        //     success: function(res) {},
-        //     fail: function(res) {},
-        //     complete: function(res) {},
-        // })
-    },
-
-
-
-
     onLoad: function (options) {
 
 
         GP = this
-        GP.onInit()
-        Scripte.Init(APP, GP, API)
+        // GP.onInit()
+        Scripte.Init(APP, GP, API, JMessage)
 
 
         // var stage = wx.getStorageSync("test").stage
@@ -197,67 +202,23 @@ Page({
 
         // Scripte.RequestRoomCreate()
         console.log(options)
-        //没有传入信息
+        //老师进入房间
         if (options.room_key == undefined || options.room_key == ""){
             Scripte.RequestStoryList()
-        }else
-            Scripte.RequestStoryList()
-            Scripte.RequestRoomJoin(options.room_key)
-        
+        }else{ //学生进入房间
+            Scripte.RequestStoryList()  
+            // Scripte.RequestRoomJoin(options.room_key)
+            //学生上线
+            GP.inStageStudent()
+            
+            // {
+            //     text: "stage",
+            //         stage:GP.data.stage
+            // },
+    
+        }
     },
 
-    onInit(){
-        var storyList = [
-            {
-                name: "吃火锅",
-                summary: "一家人温馨的小故事",
-                list: [
-                    { url: 'http://img.12xiong.top/emoji_default.gif' ,
-                        config: {
-                            background: {
-                                url: "../../images/1.jpg",
-                                audio_url: "",
-                                width: "100vw",
-                                // height: "100vh",
-                            },
-                            pusher: {
-                                url: "rtmp://video-center.alivecdn.com/AppName/StreamName?vhost=live.12xiong.top",
-                                cover_url: "../../images/pusher_logo.png",
-                                x: "125rpx",
-                                y: "480rpx",
-                                width: "125rpx",
-                                height: "150rpx",
-                            },
-                            player: {
-                                url: "rtmp://video-center.alivecdn.com/AppName/StreamName?vhost=live.12xiong.top",
-                                cover_url: "../../images/pusher_logo.png",
-                                x: "80rpx",
-                                y: "600rpx",
-                                width: "120px",
-                                height: "50px",
-                            },
-                        },
-                    },
-                    { url: '../../images/1.jpg' },
-                    { url: 'http://qiniu.308308.com/hx_245_2018_01_18_08_47_14.jpg' },
-                ],                
-            },
-            {
-                name: "春游",
-                summary: "一起出去玩拉拉",
-                list: [
-                    { url: 'http://qiniu.308308.com/hx_245_2018_01_18_08_47_14.jpg' },
-                    { url: 'http://img.12xiong.top/emoji_default.gif' },
-                    { url: '../../images/1.jpg' },
-                ],
-            },
-        ]
-
-        // GP.setData({
-        //     config: storyList[0].list[0].config,
-        //     storyList: storyList,
-        // })
-    },
 
     getUserInfo: function(e) {
         console.log(e)
@@ -269,3 +230,65 @@ Page({
     },
     
 })
+
+
+
+
+
+
+
+
+
+// onInit(){
+//     var storyList = [
+//         {
+//             name: "吃火锅",
+//             summary: "一家人温馨的小故事",
+//             list: [
+//                 {
+//                     url: 'http://img.12xiong.top/emoji_default.gif',
+//                     config: {
+//                         background: {
+//                             url: "../../images/1.jpg",
+//                             audio_url: "",
+//                             width: "100vw",
+//                             // height: "100vh",
+//                         },
+//                         pusher: {
+//                             url: "rtmp://video-center.alivecdn.com/AppName/StreamName?vhost=live.12xiong.top",
+//                             cover_url: "../../images/pusher_logo.png",
+//                             x: "125rpx",
+//                             y: "480rpx",
+//                             width: "125rpx",
+//                             height: "150rpx",
+//                         },
+//                         player: {
+//                             url: "rtmp://video-center.alivecdn.com/AppName/StreamName?vhost=live.12xiong.top",
+//                             cover_url: "../../images/pusher_logo.png",
+//                             x: "80rpx",
+//                             y: "600rpx",
+//                             width: "120px",
+//                             height: "50px",
+//                         },
+//                     },
+//                 },
+//                 { url: '../../images/1.jpg' },
+//                 { url: 'http://qiniu.308308.com/hx_245_2018_01_18_08_47_14.jpg' },
+//             ],
+//         },
+//         {
+//             name: "春游",
+//             summary: "一起出去玩拉拉",
+//             list: [
+//                 { url: 'http://qiniu.308308.com/hx_245_2018_01_18_08_47_14.jpg' },
+//                 { url: 'http://img.12xiong.top/emoji_default.gif' },
+//                 { url: '../../images/1.jpg' },
+//             ],
+//         },
+//     ]
+
+//     // GP.setData({
+//     //     config: storyList[0].list[0].config,
+//     //     storyList: storyList,
+//     // })
+// },

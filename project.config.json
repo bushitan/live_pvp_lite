@@ -34,9 +34,15 @@
 			"list": [
 				{
 					"id": 0,
-					"name": "index",
+					"name": "index_student",
 					"pathName": "pages/index/index",
 					"query": "room_key=5"
+				},
+				{
+					"id": -1,
+					"name": "index",
+					"pathName": "pages/index/index",
+					"query": ""
 				}
 			]
 		}

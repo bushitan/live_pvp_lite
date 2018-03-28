@@ -1,13 +1,21 @@
 
+var KEY = require('../../utils/key.js');
+
+var teacher = "live_app_3"
+var student = 'live_pvp_user_5'
+
+
 module.exports = new (function() {
     var that = this
     var APP = null
     var GP = null
     var API = null
-    this.Init = function (_APP, _GP, _API){
+    var JMessage = null
+    this.Init = function (_APP, _GP, _API, _JMessage){
         APP = _APP
         GP = _GP
         API = _API
+        JMessage = _JMessage
     }
 
     //获取故事列表
@@ -22,15 +30,92 @@ module.exports = new (function() {
                     // config: storyList[0].list[0].config,
                     // storyList: storyList,
                 })
-                // GP.jmInit() //IM登陆  
+                that.jmInit() //IM登陆  
             },
         })
     }
 
-    //加入IM
+    /**
+     * IM监听
+     */
     this.jmInit = function () {
-
+        var user_info = wx.getStorageSync(KEY.USER_INFO)
+        var userName = "live_pvp_user_" + user_info.user_id
+        console.log(userName)
+        // var userName = "live_app_3"
+        var passWord = "123"
+        JMessage.init(APP, userName, passWord, this.listen);
     }
+
+    //监听事件
+    this.listen = function(){
+
+        if(GP.data.isTeacher == false){
+            var s_say = { text: "on" }
+            that.sendSingleCustom(teacher, s_say) //学生打招呼
+        }
+        //监听单聊信息
+        JMessage.JIM.onMsgReceive(function (data) {
+            // var msg = data;
+            // var body = data.messages[0].content.msg_body;
+            // data = JSON.stringify(data);
+            // console.log('msg_receive:' + data);
+            // console.log(data)
+            var body = data.messages[0].content.msg_body
+            var text = body.text
+            if (text == "on"){
+                wx.showModal({
+                    title: '学生上线',
+                })
+                var t_call = {
+                    text: "stage",
+                    stage:GP.data.stage
+                }
+                that.sendSingleCustom(student, t_call)
+            }
+                // console.log('学生上线')
+            // else {
+            if (text == "stage"){
+                var custom = body.stage
+                console.log(custom)
+                wx.showToast({
+                    title: '更换主题',
+                    icon:"success",
+                })
+                GP.setData({
+                    stage: custom
+                })
+            }
+
+        });
+    },
+
+    this.sendSingleCustom = function (username, custom) {
+        JMessage.JIM.sendSingleCustom({
+            'target_username': username,
+            'custom': custom,
+            'need_receipt': true
+        }).onSuccess(function (data) {
+            console.log(data)
+            // var re = that.data.logInfo + 'success:' + JSON.stringify(data);
+            
+        }).onFail(function (data) {
+            var re = that.data.logInfo + 'fail:' + JSON.stringify(data);
+            that.setData({
+                logInfo: re
+            });
+        });
+    }
+
+
+
+
+
+
+
+
+
+
     //获取故事列表
     this.RequestRoomCreate = function () {
         API.Request({
@@ -60,9 +145,9 @@ module.exports = new (function() {
                 // console.log(res.data)
                 //TODO 成功，进入房间，学生身份
                 if (res.data.is_alive == true){
-                    //TODO 成功，进入房间，学生身份
-                    // that.ShowStage()
                     GP.inStageStudent()
+                    //给老师发送on
+
                     
                 } else{
                     // wx.showModal({
