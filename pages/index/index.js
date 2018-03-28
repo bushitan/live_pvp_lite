@@ -1,21 +1,26 @@
 //index.js
 //获取应用实例
 const APP = getApp()
-
+var API = require('../../utils/api.js');
 var Scripte = require('scripte.js');
 var GP
 Page({
     data: {
         //权限
         isMember:false,//是否会员
-        isHost:true , //是否房主
-
+        isTeacher:true , //是否房主
+        roomKey:"", //房间秘钥
+        roomConfig:{}, //房间推流、拉流配置
+        storyList:[],//场景的二维数组
+        stage:{},//当前场景
+        rol:0,
+        col:0,
         //页面显示
         show:{
-            stage: true, //直播舞台
-            menu: true, //菜单
+            stage: false, //直播舞台
+            menu: false, //菜单
             theme:false, //更换主题
-            story: false, //故事菜单
+            story: true, //故事菜单
             member:false,  //会员支付
         },
 
@@ -44,14 +49,20 @@ Page({
     },
     //点击图片，选择场景
     clickStoryImage(e) {
-        var imageUrl = e.detail
-        var background = GP.data.config.background
-        background.url = imageUrl
+        var rol = e.detail.rol
+        var col = e.detail.col
         GP.setData({
-            // showRoom: true,
-            background: background
+            rol:rol,
+            col:col,
+            stage: GP.data.storyList[rol].list[col],
         })
-        Scripte.ShowStage()
+        // wx.setStorageSync("test", {
+        //     rol: rol,
+        //     col: col,
+        //     stage: GP.data.storyList[rol].list[col],
+        // })
+        console.log(GP.data.storyList[rol].list[col])
+        GP.inStageTeacher()
     },
 
     /**
@@ -64,11 +75,35 @@ Page({
         console.log("跳转到名师电话")
     },
 
+    // 老师进入舞台
+    inStageTeacher() {
+        Scripte.ShowStage()
+        GP.setData({isTeacher:true,})
+     },
+    // 学生进入舞台
+    inStageStudent() {
+        Scripte.ShowStage()
+        GP.setData({ isTeacher: false, })
+    },
+
+
     /**
      * 3 舞台
      */
     stageClose() {
-        Scripte.ShowStory()
+        wx.showModal({
+            title: '是否离开舞台',
+            content: '您离开后，通话将断开，可以重新邀请好友进入',
+            success: function (res) {
+                if (res.confirm) {
+                    Scripte.ShowStory()
+                    GP.setData({ isTeacher: true, })
+                } else if (res.cancel) {
+                    console.log('用户点击取消')
+                }
+            }
+        })
+        
     },
     //点击背景图，打开菜单
     menuSwitch(){
@@ -89,30 +124,38 @@ Page({
         })
     },
     next() {
-        console.log("下一页")},
+        // console.log("下一页")
+        var rol = GP.data.rol
+        var col = GP.data.col
+        if (col < GP.data.storyList[rol].list.length - 1  ) {//不是最后一页
+            var temp_col = col + 1 
+            GP.setData({
+                col: temp_col,
+                stage: GP.data.storyList[rol].list[temp_col],
+            })
+        }
+    },
     back() { 
-        console.log("上一页")
+        // console.log("下一页")
+        var rol = GP.data.rol
+        var col = GP.data.col
+        if (col > 0) {//不是最后一页
+            var temp_col = col - 1 
+            GP.setData({
+                col: temp_col,
+                stage: GP.data.storyList[rol].list[temp_col],
+            })
+        }
+        
     },
 
     //分享好友
-    onShareAppMessage() { },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    onShareAppMessage() {
+        return {
+            title:"我给你讲个故事",
+            path: "/pages/index/index?room_key=" + GP.data.roomKey,
+        }
+    },
 
 
 
@@ -138,11 +181,29 @@ Page({
 
 
 
-    onLoad: function () {
+    onLoad: function (options) {
+
+
         GP = this
         GP.onInit()
+        Scripte.Init(APP, GP, API)
 
-        Scripte.Init(APP,GP)
+
+        // var stage = wx.getStorageSync("test").stage
+        // GP.setData({
+        //     stage: stage
+        // })
+        // GP.inStageTeacher()
+
+        // Scripte.RequestRoomCreate()
+        console.log(options)
+        //没有传入信息
+        if (options.room_key == undefined || options.room_key == ""){
+            Scripte.RequestStoryList()
+        }else
+            Scripte.RequestStoryList()
+            Scripte.RequestRoomJoin(options.room_key)
+        
     },
 
     onInit(){
@@ -157,7 +218,7 @@ Page({
                                 url: "../../images/1.jpg",
                                 audio_url: "",
                                 width: "100vw",
-                                height: "100vh",
+                                // height: "100vh",
                             },
                             pusher: {
                                 url: "rtmp://video-center.alivecdn.com/AppName/StreamName?vhost=live.12xiong.top",
@@ -192,10 +253,10 @@ Page({
             },
         ]
 
-        GP.setData({
-            config: storyList[0].list[0].config,
-            storyList: storyList,
-        })
+        // GP.setData({
+        //     config: storyList[0].list[0].config,
+        //     storyList: storyList,
+        // })
     },
 
     getUserInfo: function(e) {

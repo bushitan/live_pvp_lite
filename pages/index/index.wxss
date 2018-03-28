@@ -76,11 +76,15 @@
     position: fixed;
     left: 10px;
     bottom: 10px;
+    width: 30px;
+    height: 30px;
 }
 .back_heng{
     position: fixed;
     left: 10px;
     bottom: 40px;
+    width: 30px;
+    height: 30px;
 }
 .time_heng{
     position: fixed;
@@ -88,5 +92,16 @@
     bottom: 80px;
 }
 
+/* 主题 */
+.theme_cancel{
+    /* position: relative; */
+    display: flex;
+    justify-content: center;
+}
+
+.theme_cancel icon{
+    position: absolute;
+    bottom: 20px;
+}
 
 /* .pay{ background-color: #fff;} */

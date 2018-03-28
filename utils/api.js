@@ -1,14 +1,14 @@
 var KEY = require('key.js');
 
 // var host_url = 'http://192.168.200.105:8000/live/'
-// var host_url = 'http://192.168.199.204:8000/live/';
+var host_url = 'http://192.168.199.204:8000/live/';
 
-var host_url = 'http://127.0.0.1:8000/live/'; 
+// var host_url = 'http://127.0.0.1:8000/live/'; 
 // var host_url = 'https://www.12xiong.top/live/';
 // var host_url = 'https://www.12xiong.top/live/';
 
 var wxLoginUrl = host_url + 'lite/login/'
-var APP_ID = "wx76cc2152eea29e91"
+var APP_ID = "wxddf6b5519a9e3197"
 
 var APP
 var GlobalData
@@ -134,23 +134,26 @@ function _Request(options) {
 
 module.exports = {
   Request: Request,
-  LITE_LOGIN: host_url + 'lite/login/',
-  LITE_REGISTER: host_url + 'lite/register/',
-  LITE_COMPANY_GET_INFO: host_url + 'lite/company/get/info/',
-  LITE_USER_SET_INFO: host_url + 'lite/user/set/info/',
-  LITE_USER_GET_PPT: host_url + 'lite/user/get/ppt/',
+  LITE_LOGIN: wxLoginUrl,
+  PVP_STORY_GET_LIST: host_url + 'pvp/story/get_list/',  //获取故事列表
 
-  COVER_TAG_GET_LIST: host_url + 'cover/tag/get_list/',
-  COVER_NEWS_GET_LIST: host_url + 'cover/news/get_list/',
-  COVER_ARTICLE_GET: host_url + 'cover/article/get/',
+  PVP_ROOM_CREATE: host_url + 'pvp/room/create/',  //获取故事列表
+  PVP_ROOM_JOIN: host_url + 'pvp/room/join/',  //获取故事列表
+//   LITE_COMPANY_GET_INFO: host_url + 'lite/company/get/info/',
+//   LITE_USER_SET_INFO: host_url + 'lite/user/set/info/',
+//   LITE_USER_GET_PPT: host_url + 'lite/user/get/ppt/',
 
-  ROOM_GET: host_url + 'room/get/',
-  ROOM_GET_COVER: host_url + 'room/get/cover/',
-  ROOM_CHECK_TEACHER: host_url + 'room/check/teacher/',
-  ROOM_GET_LIST_BY_APP: host_url + 'room/get_list/app/',
-  ROOM_ADD_MESSAGE: host_url + 'room/add/message/',
+//   COVER_TAG_GET_LIST: host_url + 'cover/tag/get_list/',
+//   COVER_NEWS_GET_LIST: host_url + 'cover/news/get_list/',
+//   COVER_ARTICLE_GET: host_url + 'cover/article/get/',
 
-  ORDER_CHECK_MEMBER: host_url + 'order/check/member/',
+//   ROOM_GET: host_url + 'room/get/',
+//   ROOM_GET_COVER: host_url + 'room/get/cover/',
+//   ROOM_CHECK_TEACHER: host_url + 'room/check/teacher/',
+//   ROOM_GET_LIST_BY_APP: host_url + 'room/get_list/app/',
+//   ROOM_ADD_MESSAGE: host_url + 'room/add/message/',
+
+//   ORDER_CHECK_MEMBER: host_url + 'order/check/member/',
 
 
     // DAY_INDEX: host_url + 'day365/my/set/clock/',

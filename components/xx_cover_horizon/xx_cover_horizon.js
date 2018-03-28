@@ -7,13 +7,18 @@ Component({
         list: {
             type: Array,
             value: [],
-            observer: '_change',
+            // observer: '_change',
             /** 数据结构
              list[0] = {
                     "cover_url":'',
                     "article_id":'',
                 }
             */
+        },
+        //行号
+        rol: {
+            type: Number,
+            value: 0,
         },
         width: {
             type: String,
@@ -37,17 +42,21 @@ Component({
    */
   methods: {
       // 改变
-    _change(newVal, oldVal) {
-        console.log(newVal, oldVal )
-        console.log(this.data.list)
-    },
+    // _change(newVal, oldVal) {
+        // console.log(newVal, oldVal )
+        // console.log(this.data.list)
+    // },
 
     /**
      * return: 点击列表的index
      */
     click(e) {
-        var index = e.currentTarget.dataset.index
-        this.triggerEvent('click', this.data.list[index].url);
+        var col = e.currentTarget.dataset.col
+        var temp = {
+            rol:this.data.rol,
+            col:col
+        }
+        this.triggerEvent('click', temp);
     },
   }
 })
