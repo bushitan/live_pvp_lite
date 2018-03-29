@@ -1,0 +1,106 @@
+
+.tab{
+    margin-top:20px; 
+}
+.painter{
+    position: fixed;
+    width: 100%;
+}
+
+.player{
+    position: fixed;
+    top:80px;
+    left:100px;
+}
+
+.pusher{
+    
+    position: fixed;
+    top:260px;
+    left:200px;
+}
+
+
+.stage{
+    position: relative;
+}
+
+.stage image{
+    position:absolute;
+}
+
+.default{
+    display: flex;
+    justify-content: space-around;
+}
+.player_default{
+    position:absolute;
+    /* position: fixed;
+    top:80px;
+    left:100px; */
+}
+
+.pusher_default{
+    position:absolute;
+    
+    /* position: fixed;
+    top:260px;
+    left:200px; */
+}
+
+
+.preview{
+     padding-left:15px;  
+}
+
+.tool{
+    z-index: 999;
+
+}
+.new_heng{
+    position: fixed;
+    right: 10px;
+    bottom: 40px;
+}
+.cancel{
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+}
+.share_heng{
+    position: fixed;
+    left: 10px;
+    top: 40px;
+}
+.next_heng{
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+    width: 30px;
+    height: 30px;
+}
+.back_heng{
+    position: fixed;
+    left: 10px;
+    bottom: 40px;
+    width: 30px;
+    height: 30px;
+}
+.time_heng{
+    position: fixed;
+    right: 10px;
+    bottom: 80px;
+}
+
+/* 主题 */
+.theme_cancel{
+    display: flex;
+    justify-content: center;
+}
+
+.theme_cancel icon{
+    position: absolute;
+    bottom: 20px;
+}
+
+/* .pay{ background-color: #fff;} */

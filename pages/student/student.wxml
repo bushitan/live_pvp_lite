@@ -1,0 +1,12 @@
+<!--pages/student/student.wxml-->
+
+<import src="../../template/template.wxml"/>
+
+<view  >
+    <!-- stage，包含背景、推流、播放视频 3个元素 -->
+    <template is="stage" data="{{stage , clickBG:'menuSwitch'}}"></template>
+</view>
+
+<view class='tool' hidden="{{!showTool}}">
+    <icon type='cancel' size="30"  class='cancel' catchtap='stageClose' ></icon>
+</view>

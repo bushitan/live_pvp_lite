@@ -1,0 +1,47 @@
+
+<!-- 故事列表 -->
+<template name="story_list">
+    <block wx:for="{{storyList}}" wx:key="index">
+        <view class='preview' >
+            <xx-mark color="#efa234" >
+                <label style='color:#efa234'>{{item.name}}</label> 
+            </xx-mark>
+            <view>{{item.description}}</view>
+        </view>
+        <xx-cover-horizon list="{{item.list}}" rol="{{index}}"  catchclick="{{click}}" ></xx-cover-horizon>
+        <view style='height:15px;'></view>
+    </block>
+</template>
+
+<!-- 会员订单 -->
+<template name="member_page">
+    <view wx:if="{{isMember}}">
+        您的会员日期是
+    </view>
+    <view wx:else>
+        <view>会员信息，</view>
+        <button catchtap='payMember'>成为会员</button>
+    </view>
+    
+    <view>想练习口语？名师电话来帮你，在线PPT讲解，立马懂</view>
+    <button catchtap='toTeacherPhone'>名师电话</button>
+</template>
+
+
+
+<!-- 会员订单 -->
+<template name="stage">
+    <view class='stage'>
+        <!-- 背景 -->
+        <image src='{{stage.stage_background}}' style='width: {{stage.stage_width}};' mode='widthFix' catchtap='{{clickBG}}'></image>
+        <!-- 播放视频 -->
+        <view class='player_default' style='top: {{stage.player_x}};left: {{stage.player_y}};'>
+            <xx-live-player orientation="horizontal"  src="{{stage.pusher_image}}" width="{{stage.player_width}}" height="{{stage.player_height}}" >
+            </xx-live-player> 
+        </view> 
+        <!-- 推流 -->
+        <view class='pusher_default' style='top: {{stage.pusher_y}};right: {{stage.pusher_x}};' >
+            <xx-live-pusher src="{{stage.pusher_image}}" width="{{stage.pusher_width}}" height="{{stage.pusher_height}}" menu="{{false}}" ></xx-live-pusher> 
+        </view>
+    </view>
+</template>

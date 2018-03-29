@@ -3,14 +3,16 @@ module.exports = {
     //storage的key
     SESSION: "session",
     USER_INFO: "user_info",
+    MEMBER_TEMP_LIVE: "member_temp_live",
+    MEMBER_REFRESH_DAY: "member_refresh_day",
 
-    CARD_LIST: "card_list",
-    STRANGER : 1,
-    UNSURE : 2,
-    SURE : 3,
-    MODE_SHOW_UPADTE: "mode_show_update",
-    FIRST_IN_ADD: "first_in_add",
-    IS_SIGN:"is_sign",
+    // CARD_LIST: "card_list",
+    // STRANGER : 1,
+    // UNSURE : 2,
+    // SURE : 3,
+    // MODE_SHOW_UPADTE: "mode_show_update",
+    // FIRST_IN_ADD: "first_in_add",
+    // IS_SIGN:"is_sign",
 
     //静态变量
     YES: 1,

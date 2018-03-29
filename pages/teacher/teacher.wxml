@@ -1,0 +1,27 @@
+
+<import src="../../template/template.wxml"/>
+
+<view  >
+    <!-- 在stage中更换主题 -->
+    <view hidden="{{!showTheme}}">
+        <scroll-view scroll-y style='height:100vh'>
+            <view class="theme_cancel" >
+                <icon type='cancel' size="30"  catchtap='themeSwitch'  ></icon>
+            </view>
+            <template is="story_list" data="{{storyList,click:'clickStoryImage'}}" ></template>
+        </scroll-view>
+    </view>
+    <!-- stage，包含背景、推流、播放视频 3个元素 -->
+    <template is="stage" data="{{stage , clickBG:'menuSwitch'}}"></template>
+</view>
+
+ <!-- hidden='{{!show.menu}}' -->
+
+<view class='tool' hidden="{{!showTool}}">
+    <icon type='cancel' size="30"  class='cancel' catchtap='stageClose' ></icon>
+    <button size='mini' class='new_heng' catchtap='themeSwitch'>换主题</button>
+    <button size='mini' class='share_heng' open-type="share">邀请好友</button>
+    <image src='../../images/back_heng.png' class='back_heng' catchtap='back' hidden='{{col == 0}}'></image>
+    <image src='../../images/next_heng.png' class='next_heng' catchtap='next' hidden='{{ col >= storyList[rol].list.length - 1 }}'></image>
+    <label class='time_heng'>8:59</label>
+</view>

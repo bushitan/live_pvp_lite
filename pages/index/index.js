@@ -12,9 +12,7 @@ Page({
     data: {
         //权限
         isMember:false,//是否会员
-        isTeacher:true , //是否房主
-        roomKey:"", //房间秘钥
-        roomConfig:{}, //房间推流、拉流配置
+        
         storyList:[],//场景的二维数组
         stage:{},//当前场景
         rol:0,
@@ -33,13 +31,7 @@ Page({
 
 
         playerTab:["选故事","会员"],
-        pptList: [
-            { url: 'http://img.12xiong.top/emoji_default.gif' },
-            { url: '../../images/1.jpg' },
-            { url: 'http://qiniu.308308.com/hx_245_2018_01_18_08_47_14.jpg' },
-            { imaurlge_url: 'http://qiniu.308308.com/hx_245_2018_01_18_08_47_14.jpg' },
-            { url: 'http://qiniu.308308.com/hx_245_2018_01_18_08_47_14.jpg' },
-        ],
+        
     },
 
 
@@ -63,20 +55,13 @@ Page({
             col:col,
             stage: GP.data.storyList[rol].list[col],
         })
-        // wx.setStorageSync("test", {
-        //     rol: rol,
-        //     col: col,
-        //     stage: GP.data.storyList[rol].list[col],
-        // })
-        console.log(GP.data.storyList[rol].list[col])
-        GP.inStageTeacher()
 
-        var t_call = {
-            text: "stage",
-            stage: GP.data.stage
-        }
-        Scripte.sendSingleCustom(student, t_call)
+        var options = "col=" + col + "&rol=" + rol
+        wx.navigateTo({
+            url: '/pages/teacher/teacher?' + options,
+        })
 
+        return
     },
 
     /**
@@ -89,79 +74,6 @@ Page({
         console.log("跳转到名师电话")
     },
 
-    // 老师进入舞台
-    inStageTeacher() {
-        Scripte.ShowStage()
-        GP.setData({isTeacher:true,})
-     },
-    // 学生进入舞台
-    inStageStudent() {
-        Scripte.ShowStage()
-        GP.setData({ isTeacher: false, })
-    },
-
-
-    /**
-     * 3 舞台
-     */
-    stageClose() {
-        wx.showModal({
-            title: '是否离开舞台',
-            content: '您离开后，通话将断开，可以重新邀请好友进入',
-            success: function (res) {
-                if (res.confirm) {
-                    Scripte.ShowStory()
-                    GP.setData({ isTeacher: true, })
-                } else if (res.cancel) {
-                    console.log('用户点击取消')
-                }
-            }
-        })
-        
-    },
-    //点击背景图，打开菜单
-    menuSwitch(){
-        Scripte.MenuSwitch()
-    },
-    //打开主题
-    themeOpen() {
-        Scripte.ShowTheme()
-    },
-    //关闭主题
-    themeClose() {
-        Scripte.CloseTheme()
-    },
-    //选择主题
-    themeConfirm() {
-        GP.setData({
-            showRoom: false,
-        })
-    },
-    next() {
-        // console.log("下一页")
-        var rol = GP.data.rol
-        var col = GP.data.col
-        if (col < GP.data.storyList[rol].list.length - 1  ) {//不是最后一页
-            var temp_col = col + 1 
-            GP.setData({
-                col: temp_col,
-                stage: GP.data.storyList[rol].list[temp_col],
-            })
-        }
-    },
-    back() { 
-        // console.log("下一页")
-        var rol = GP.data.rol
-        var col = GP.data.col
-        if (col > 0) {//不是最后一页
-            var temp_col = col - 1 
-            GP.setData({
-                col: temp_col,
-                stage: GP.data.storyList[rol].list[temp_col],
-            })
-        }
-        
-    },
 
     //分享好友
     onShareAppMessage() {
@@ -172,123 +84,56 @@ Page({
     },
 
 
-    /**
-     * IM系统
-     */
-
-
-
-    testTheme(){
-        Scripte.sendSingleCustom()
-    },
-
-
-
-   
-
     onLoad: function (options) {
 
 
         GP = this
+        GP.checkTimeOut(options)
         // GP.onInit()
         Scripte.Init(APP, GP, API, JMessage)
-
-
-        // var stage = wx.getStorageSync("test").stage
-        // GP.setData({
-        //     stage: stage
-        // })
-        // GP.inStageTeacher()
-
-        // Scripte.RequestRoomCreate()
-        console.log(options)
-        //老师进入房间
-        if (options.room_key == undefined || options.room_key == ""){
-            Scripte.RequestStoryList()
-        }else{ //学生进入房间
-            Scripte.RequestStoryList()  
-            // Scripte.RequestRoomJoin(options.room_key)
-            //学生上线
-            GP.inStageStudent()
-            
-            // {
-            //     text: "stage",
-            //         stage:GP.data.stage
-            // },
-    
-        }
+        GP.getStoryList()
+        GP.checkMember()
+     
     },
-
-
-    getUserInfo: function(e) {
-        console.log(e)
-        app.globalData.userInfo = e.detail.userInfo
-        this.setData({
-        userInfo: e.detail.userInfo,
-        hasUserInfo: true
+    //次数超时的提示
+    checkTimeOut(options){
+        if (options.time_out != undefined)
+            wx.showModal({
+                title: '老师今天的次数已经用光',
+                content: '你可以再邀请他一次，每天有2次机会哦',
+            })
+    },
+    //获取故事列表
+    getStoryList() {
+        API.Request({
+            url: API.PVP_STORY_GET_LIST,
+            success: function (res) {
+                console.log(res.data)
+                APP.globalData.storyList = res.data.stage_list
+                GP.setData({
+                    storyList: res.data.stage_list,
+                })
+                // wx.setStorageSync("story_list", res.data.stage_list)
+            },
+        })
+     },
+     //检测是否会员
+    checkMember() { 
+        API.Request({
+            url: API.PVP_MEMBER_CHECK,
+            success: function (res) {
+                console.log(res.data)
+                APP.globalData.isMember = res.data.is_member
+                GP.setData({
+                    isMember: res.data.is_member,
+                })
+                // wx.setStorageSync("story_list", res.data.stage_list)
+            },
         })
     },
+
     
 })
 
 
 
-
-
-
-
-
-
-// onInit(){
-//     var storyList = [
-//         {
-//             name: "吃火锅",
-//             summary: "一家人温馨的小故事",
-//             list: [
-//                 {
-//                     url: 'http://img.12xiong.top/emoji_default.gif',
-//                     config: {
-//                         background: {
-//                             url: "../../images/1.jpg",
-//                             audio_url: "",
-//                             width: "100vw",
-//                             // height: "100vh",
-//                         },
-//                         pusher: {
-//                             url: "rtmp://video-center.alivecdn.com/AppName/StreamName?vhost=live.12xiong.top",
-//                             cover_url: "../../images/pusher_logo.png",
-//                             x: "125rpx",
-//                             y: "480rpx",
-//                             width: "125rpx",
-//                             height: "150rpx",
-//                         },
-//                         player: {
-//                             url: "rtmp://video-center.alivecdn.com/AppName/StreamName?vhost=live.12xiong.top",
-//                             cover_url: "../../images/pusher_logo.png",
-//                             x: "80rpx",
-//                             y: "600rpx",
-//                             width: "120px",
-//                             height: "50px",
-//                         },
-//                     },
-//                 },
-//                 { url: '../../images/1.jpg' },
-//                 { url: 'http://qiniu.308308.com/hx_245_2018_01_18_08_47_14.jpg' },
-//             ],
-//         },
-//         {
-//             name: "春游",
-//             summary: "一起出去玩拉拉",
-//             list: [
-//                 { url: 'http://qiniu.308308.com/hx_245_2018_01_18_08_47_14.jpg' },
-//                 { url: 'http://img.12xiong.top/emoji_default.gif' },
-//                 { url: '../../images/1.jpg' },
-//             ],
-//         },
-//     ]
-
-//     // GP.setData({
-//     //     config: storyList[0].list[0].config,
-//     //     storyList: storyList,
-//     // })
-// },

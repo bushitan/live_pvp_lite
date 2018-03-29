@@ -139,6 +139,8 @@ module.exports = {
 
   PVP_ROOM_CREATE: host_url + 'pvp/room/create/',  //获取故事列表
   PVP_ROOM_JOIN: host_url + 'pvp/room/join/',  //获取故事列表
+
+  PVP_MEMBER_CHECK: host_url + 'pvp/member/check/',  //获取故事列表
 //   LITE_COMPANY_GET_INFO: host_url + 'lite/company/get/info/',
 //   LITE_USER_SET_INFO: host_url + 'lite/user/set/info/',
 //   LITE_USER_GET_PPT: host_url + 'lite/user/get/ppt/',
