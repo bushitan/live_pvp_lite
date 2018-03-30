@@ -23,6 +23,7 @@ Page({
         isTeacher: true, //是否房主
         showTheme:false,
         showTool:true,
+        isHeng:false,
     },
 
     /**
@@ -58,7 +59,7 @@ Page({
         })
 
         //4 im 更换主题，想学生发送消息
-        if (GP.globalData.student_name == null){
+        if (APP.globalData.student_name == null){
             wx.showToast({
                 title: '对方不在线，请邀请好友',
                 icon:"loading",
@@ -124,7 +125,7 @@ Page({
     //1 创建房间成功，初始化IM
     createRoomSuccess() {
         var user_info = wx.getStorageSync(KEY.USER_INFO)
-        var userName = "live_app_3"
+        var userName = "live_pvp_user_" + user_info.user_id
         // var userName = "bushitan"
         var passWord = "123"
         if (APP.globalData.JMessage == null) //IM 不存在，初始化
@@ -133,7 +134,7 @@ Page({
 
     //2 监听学生上线消息
     getMessage(body) {
-        if (text == "on") { //接收学生的上线信息
+        if (body.text == "on") { //接收学生的上线信息
             GP.getStudentOnline(body.student_name )
         }
 
@@ -146,19 +147,21 @@ Page({
         //2 存储学生信息
         APP.globalData.student_name = student_name //学生名字
         //3发送回复
-        GP.sendStage()
+        GP.sendStage(student_name)
     },
 
 
 
     //3 像学生发送舞台信息
-    sendStage() {
+    sendStage(student_name) {
 
         var t_call = {
             text: "stage",
             stage: GP.data.stage
         }
         APP.globalData.JMessage.sendSingleCustom(APP.globalData.student_name, t_call)
+        // APP.globalData.JMessage.sendSingleCustom(student_name, t_call)
+        // APP.globalData.JMessage.sendSingleCustom('bushitan', t_call)
     },
     
 
@@ -209,6 +212,21 @@ Page({
      * 用户点击右上角分享
      */
     onShareAppMessage: function () {
+
+        var path = "/pages/student/student?room_key=" + GP.data.roomKey //原始分享路径
+        return {
+            title: "我给你讲个故事",
+            path: path,
+            success: function (res) {
+                if (tempLive <= 0) {
+                    wx.showModal({
+                        title: '临时次数已到',
+                        content: '成为会员可以无限次使用哦',
+                    })
+                }
+            },
+        }
+
         GP.SetCountDown()
 
 

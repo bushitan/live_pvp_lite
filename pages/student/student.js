@@ -103,7 +103,7 @@ Page({
         var userName = "live_pvp_user_" + user_info.user_id
         var passWord = "123"
         if (APP.globalData.JMessage == null) //IM 不存在，初始化
-            APP.onInitIMStudent(userName, passWord , bushitan)
+            APP.onInitIMStudent(userName, passWord, 'live_pvp_user_6')
     },
 
     joinFail(){

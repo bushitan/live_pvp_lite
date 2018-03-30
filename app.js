@@ -31,6 +31,10 @@ App({
         JMessage.init("", username, password, GP.teacherSuccess);
     },
     teacherSuccess() {
+
+        // var s_say = { text: "on", student_name:'1' }
+        // JMessage.sendSingleCustom('bushitan', s_say) //学生打招呼
+
         GP.listen()
     },
 

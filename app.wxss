@@ -1,7 +1,8 @@
 page{
      /* background-color: #f7f7f7;  */
-      background-color: #eeeeee;  
+      /* background-color: #eeeeee;   */
      /* background-color: #888; */
+    background-color: #fff;  
     font-size: 16px;
     font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif,Microsoft YaHei;
     font-family : "Microsoft YaHei";
