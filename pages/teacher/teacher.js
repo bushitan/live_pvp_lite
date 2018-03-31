@@ -19,11 +19,14 @@ Page({
     data: {
 
         isMember: false,//是否会员
-        
-        isTeacher: true, //是否房主
-        showTheme:false,
-        showTool:true,
-        isHeng:false,
+        isOnline:false, //学生未上线
+        showTheme:false, //显示主题
+        showTool:true,//显示根据
+        isHeng:false,//是否横屏
+
+        token:null,//验证是否能够连接
+        userName: null, //IM账号
+        passWord: null, //IM密码
     },
 
     /**
@@ -31,6 +34,11 @@ Page({
      */
     //点击背景图，打开菜单
     stageClose() {
+        var t_call = {
+          text: "off",
+          stage: GP.data.stage
+        }
+        APP.globalData.JMessage.sendSingleCustom(APP.globalData.student_name, t_call)
         wx.navigateBack({})
     },
     // 换主题
@@ -111,47 +119,81 @@ Page({
             col:col,
             stage: _stage,
             storyList: APP.globalData.storyList,
-
             isMember: APP.globalData.isMember, //是否会员
         })
-        
-        GP.createRoomSuccess()
 
-        
+        GP.createRoomSuccess()
+        GP.connectIMSuccess()        
     },
+    // 创建房间
+    createRoomSuccess(){
+        API.Request({
+            url: API.PVP_ROOM_CREATE,
+            success:function(res){
+                console.log(res.data)
+                GP.setData({
+                    roomKey: res.data.room_key,
+                    roomConfig: res.data.room_config,
+                })
+            },
+        })
+    },
+
     /**
      * 2 IM功能
      */
     //1 创建房间成功，初始化IM
-    createRoomSuccess() {
+    connectIMSuccess() {
         var user_info = wx.getStorageSync(KEY.USER_INFO)
         var userName = "live_pvp_user_" + user_info.user_id
         // var userName = "bushitan"
         var passWord = "123"
+        GP.setData({
+            userName:userName,
+            passWord:passWord,
+        })
         if (APP.globalData.JMessage == null) //IM 不存在，初始化
             APP.onInitIMTeacher(userName, passWord)
     },
 
     //2 监听学生上线消息
     getMessage(body) {
-        if (body.text == "on") { //接收学生的上线信息
-            GP.getStudentOnline(body.student_name )
-        }
+      if (body.text == "on") { //接收学生的上线信息
+        GP.getStudentOnline(body.student_name)
+      }
 
+      if (body.text == "off") { //接收学生的下信息
+        GP.getStudentOffline(body.student_name)
+      }
+
+    },
+
+    //1 提示学生下线
+    getStudentOffline(student_name) {
+      wx.showModal({
+        title: '学生下线',
+        success:function(){
+          wx.navigateBack()
+        },
+      })
+      // //2 存储学生信息
+      // APP.globalData.student_name = student_name //学生名字
+      // //3发送回复
+      // GP.sendStage(student_name)
     },
     //1 提示学生上线
     getStudentOnline(student_name){
         wx.showModal({
             title: '学生上线',
         })
+        GP.setData({
+          isOnline:true,
+        })
         //2 存储学生信息
         APP.globalData.student_name = student_name //学生名字
         //3发送回复
         GP.sendStage(student_name)
     },
-
-
-
     //3 像学生发送舞台信息
     sendStage(student_name) {
 
@@ -207,11 +249,22 @@ Page({
     },
 
 
+    onShareAppMessage: function () {
+        var path = "/pages/student/student?token=" + GP.data.userName  //原始分享路径
+        GP.setData({
+            token: GP.data.userName
+        })
+        return {
+            title: "我给你讲个故事",
+            path: path,
+        }
+    },
+
 
     /**
      * 用户点击右上角分享
      */
-    onShareAppMessage: function () {
+    ott: function () {
 
         var path = "/pages/student/student?room_key=" + GP.data.roomKey //原始分享路径
         return {

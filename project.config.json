@@ -30,7 +30,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
+			"current": 3,
 			"list": [
 				{
 					"id": 0,
@@ -54,7 +54,7 @@
 					"id": 3,
 					"name": "student",
 					"pathName": "pages/student/student",
-					"query": "room_key=5"
+					"query": "room_key=6"
 				}
 			]
 		}

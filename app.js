@@ -47,7 +47,7 @@ App({
             var body = data.messages[0].content.msg_body
             console.log(body)
             var text = body.text
-            GP.globalData.currentPage.getMessage(body)
+            GP.globalData.currentPage.getMessage(body, data.messages[0].msg_id)
             // if (text == "on") { //接收学生的上线信息
             //     GP.globalData.currentPage.getMessage(body.student_name)
             // }

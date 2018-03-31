@@ -18,11 +18,6 @@ Page({
     data: {
         showTool: true,
     },
-    stageClose() {
-        wx.navigateTo({
-            url: '/pages/index/index',
-        })
-    },
     menuSwitch() {
         GP.setData({
             showTool: !GP.data.showTool,
@@ -36,6 +31,7 @@ Page({
     onLoad: function (options) {
         GP = this
         APP.globalData.currentPage = this //当前页面设置为全局变量
+        
         if (options.room_key == undefined)
             GP.joinFail()
         else{
@@ -52,25 +48,59 @@ Page({
             success: function (res) {
                 //TODO 成功，进入房间，学生身份
                 if (res.data.is_alive == true) {
-                    // GP.joinSuccess()
-                } else {
-                    // GP.joinFail()
                     GP.joinSuccess()
+                } else {
+                    GP.joinFail()
+                    // GP.joinSuccess()
 
                 }
             },
         })
     },
 
+    //下线
+    stageClose() {
+        var s_say = { text: "off", student_name: APP.globalData.student_name }
+        APP.globalData.JMessage.sendSingleCustom(APP.globalData.teacher_name, s_say) //学生打招呼
+        wx.navigateTo({
+            url: '/pages/index/index',
+        })
+    },
+    
     //监听消息
-    getMessage(body) {
-        if (text == "stage") {
+    getMessage(body, msg_id) {
+        if (body.text == "stage") {
+            console.log(body)
             GP.getStageChange(body.stage)
+            GP.addSingleReceiptReport(msg_id)
         }
-        if (text == "time_out") {
+        if (body.text == "off") {
+            GP.getTeacherOffline()
+        }
+        if (body.text == "time_out") {
             GP.getTimeOut()
         }
+    },
 
+    getTeacherOffline(){
+        wx.showModal({
+            title: '老师下线',
+            success: function(){
+                wx.redirectTo({
+                    url: '/pages/index/index',
+                })
+            },
+        })
+    },
+
+    addSingleReceiptReport(msg_id) {
+        APP.globalData.JMessage.JIM.addSingleReceiptReport({ 
+            'username': APP.globalData.teacher_name, 
+            'msg_ids': [msg_id],
+        }).onSuccess(function (data, data2) {
+            console.log('success :' + JSON.stringify(data));
+            console.log('success :' + JSON.stringify(data2));
+        });
     },
     //1改变场景
     getStageChange(stage){
