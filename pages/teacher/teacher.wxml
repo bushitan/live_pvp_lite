@@ -36,7 +36,7 @@
             <image src='../../images/theme_heng.png' class=' '  catchtap='themeSwitch'></image>
         </label>
 
-        <label class='share_heng'>
+        <label class='share_heng' hidden="{{isOnline}}">
             <button size='mini' class='share_heng' open-type="share">
                 <image src='../../images/share_heng.png' class=' '  ></image>
             </button>
@@ -58,7 +58,7 @@
             <image src='../../images/theme_shu.png' class=' '  catchtap='themeSwitch'></image>
         </label>
 
-        <label class='share_shu'>
+        <label class='share_shu' hidden="{{isOnline}}">
             <button size='mini' class='share_shu' open-type="share">
                 <image src='../../images/share_shu.png' class=' '  ></image>
             </button>

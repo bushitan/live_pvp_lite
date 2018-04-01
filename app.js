@@ -14,14 +14,14 @@ App({
     },
 
     //学生登录IM
-    onInitIMStudent(username, password, teacher_name){
+    onInitIMStudent(username, password, teacher_name, token){
         //初始化IM
         JMessage.init("", username, password, GP.studentSuccess);
         GP.globalData.teacher_name = teacher_name//老师名字
         GP.globalData.student_name = username //学生名字
     },
     studentSuccess(){
-        var s_say = { text: "on", student_name: GP.globalData.student_name}
+        var s_say = { text: "check", student_name: GP.globalData.student_name}
         JMessage.sendSingleCustom(GP.globalData.teacher_name, s_say) //学生打招呼
         GP.listen()
     },

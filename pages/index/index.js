@@ -25,8 +25,8 @@ Page({
             stage: false, //直播舞台
             menu: false, //菜单
             theme:false, //更换主题
-            story: false, //故事菜单
-            member: true,  //会员支付
+            story: true, //故事菜单
+            member: false,  //会员支付
         },
 
 

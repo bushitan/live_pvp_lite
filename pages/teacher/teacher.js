@@ -2,8 +2,8 @@
 const APP = getApp()
 var API = require('../../utils/api.js');
 var KEY = require('../../utils/key.js');
-// var Scripte = require('scripte.js');
-// var JMessage = require('../../utils/im/jm.js')
+var Scripte = require('scripte.js');
+var JMessage = require('../../utils/im/jm.js')
 
 var teacher = "live_app_3"
 var student = 'live_pvp_user_5'
@@ -25,8 +25,9 @@ Page({
         isHeng:false,//是否横屏
 
         token:null,//验证是否能够连接
-        userName: null, //IM账号
+        teacherName: null, //IM账号
         passWord: null, //IM密码
+        studentName: null, //IM账号
     },
 
     /**
@@ -34,12 +35,22 @@ Page({
      */
     //点击背景图，打开菜单
     stageClose() {
-        var t_call = {
-          text: "off",
-          stage: GP.data.stage
+        if (GP.data.studentName == null) {
+            // console.log(JMessage.JIM.loginOut())
+            
+            wx.navigateBack({})
+            
         }
-        APP.globalData.JMessage.sendSingleCustom(APP.globalData.student_name, t_call)
-        wx.navigateBack({})
+        else{
+            var t_call = {
+                text: "off",
+                stage: GP.data.stage
+            }
+            JMessage.sendSingleCustom(GP.data.studentName, t_call)
+            wx.navigateBack({})
+        }
+            
+
     },
     // 换主题
     themeSwitch() {
@@ -67,14 +78,14 @@ Page({
         })
 
         //4 im 更换主题，想学生发送消息
-        if (APP.globalData.student_name == null){
+        if (GP.data.studentName == null){
             wx.showToast({
                 title: '对方不在线，请邀请好友',
                 icon:"loading",
             })
         }
         else
-            GP.sendStage()
+            Scripte.sendStage()
     },
     next() {
         // console.log("下一页")
@@ -87,6 +98,7 @@ Page({
                 stage: GP.data.storyList[rol].list[temp_col],
             })
         }
+        Scripte.sendStage()
     },
     back() {
         // console.log("下一页")
@@ -99,7 +111,7 @@ Page({
                 stage: GP.data.storyList[rol].list[temp_col],
             })
         }
-
+        Scripte.sendStage()
     },
 
 
@@ -122,195 +134,214 @@ Page({
             isMember: APP.globalData.isMember, //是否会员
         })
 
-        GP.createRoomSuccess()
-        GP.connectIMSuccess()        
-    },
-    // 创建房间
-    createRoomSuccess(){
-        API.Request({
-            url: API.PVP_ROOM_CREATE,
-            success:function(res){
-                console.log(res.data)
-                GP.setData({
-                    roomKey: res.data.room_key,
-                    roomConfig: res.data.room_config,
-                })
-            },
-        })
+        Scripte.Init(APP, GP, API, JMessage) //初始化脚本
+        GP.initIM()
+        // GP.createRoomSuccess()
+        // GP.connectIMSuccess()        
     },
 
-    /**
-     * 2 IM功能
-     */
-    //1 创建房间成功，初始化IM
-    connectIMSuccess() {
+
+    initIM(){
         var user_info = wx.getStorageSync(KEY.USER_INFO)
-        var userName = "live_pvp_user_" + user_info.user_id
-        // var userName = "bushitan"
+        var teacherName = "live_pvp_user_" + user_info.user_id
         var passWord = "123"
         GP.setData({
-            userName:userName,
-            passWord:passWord,
+            teacherName: teacherName,
+            passWord: passWord,
         })
-        if (APP.globalData.JMessage == null) //IM 不存在，初始化
-            APP.onInitIMTeacher(userName, passWord)
+        JMessage.init("", teacherName, passWord, GP.IMSuccess);
     },
 
-    //2 监听学生上线消息
-    getMessage(body) {
-      if (body.text == "on") { //接收学生的上线信息
-        GP.getStudentOnline(body.student_name)
-      }
+    IMSuccess(){
+        JMessage.JIM.onMsgReceive(function (data) {
+            var body = data.messages[0].content.msg_body
 
-      if (body.text == "off") { //接收学生的下信息
-        GP.getStudentOffline(body.student_name)
-      }
+            if (body.text == "check") { //接收学生的上线信息
+                Scripte.getCheck(body.student_name, body.token)
+            }
 
-    },
+            // if (body.text == "on") { //接收学生的上线信息
+            //     GP.getStudentOnline(body.student_name)
+            // }
 
-    //1 提示学生下线
-    getStudentOffline(student_name) {
-      wx.showModal({
-        title: '学生下线',
-        success:function(){
-          wx.navigateBack()
-        },
-      })
-      // //2 存储学生信息
-      // APP.globalData.student_name = student_name //学生名字
-      // //3发送回复
-      // GP.sendStage(student_name)
-    },
-    //1 提示学生上线
-    getStudentOnline(student_name){
-        wx.showModal({
-            title: '学生上线',
+            if (body.text == "off") { //接收学生的下信息
+                Scripte.getStudentOffline(body.student_name)
+            }
+
         })
+    },
+
+    onShareAppMessage: function () {
+        var newToken = "1"
+        var path = "/pages/student/student?teacher_name=" + GP.data.teacherName + "&token=" + newToken //原始分享路径
         GP.setData({
-          isOnline:true,
+            token: newToken
         })
-        //2 存储学生信息
-        APP.globalData.student_name = student_name //学生名字
-        //3发送回复
-        GP.sendStage(student_name)
-    },
-    //3 像学生发送舞台信息
-    sendStage(student_name) {
-
-        var t_call = {
-            text: "stage",
-            stage: GP.data.stage
+        return {
+            title: "我给你讲个故事",
+            path: path,
         }
-        APP.globalData.JMessage.sendSingleCustom(APP.globalData.student_name, t_call)
-        // APP.globalData.JMessage.sendSingleCustom(student_name, t_call)
-        // APP.globalData.JMessage.sendSingleCustom('bushitan', t_call)
     },
+
+    onUnload(){
+        JMessage.JIM.loginOut();
+    },
+
+
+
+
+
+    // //2 监听学生上线消息
+    // getMessage(body) {
+
+
+    //     if (body.text == "check") { //接收学生的上线信息
+    //         var s_say = { text: "check", student_name: GP.globalData.student_name }
+    //         APP.globalData.JMessage.sendSingleCustom(GP.globalData.teacher_name, s_say) //学生打招呼
+    //     }
+
+    //     if (body.text == "on") { //接收学生的上线信息
+    //         GP.getStudentOnline(body.student_name)
+    //     }
+
+    //     if (body.text == "off") { //接收学生的下信息
+    //         GP.getStudentOffline(body.student_name)
+    //     }
+
+    // },
+
+    // //1 提示学生下线
+    // getStudentOffline(student_name) {
+    //   wx.showModal({
+    //     title: '学生下线',
+    //     success:function(){
+    //       wx.navigateBack()
+    //     },
+    //   })
+    //   // //2 存储学生信息
+    //   // APP.globalData.student_name = student_name //学生名字
+    //   // //3发送回复
+    //   // GP.sendStage(student_name)
+    // },
+    //1 提示学生上线
+    // getStudentOnline(student_name){
+    //     wx.showModal({
+    //         title: '学生上线',
+    //     })
+    //     GP.setData({
+    //       isOnline:true,
+    //     })
+    //     //2 存储学生信息
+    //     APP.globalData.student_name = student_name //学生名字
+    //     //3发送回复
+    //     GP.sendStage(student_name)
+    // },
+    // //3 像学生发送舞台信息
+    // sendStage(student_name) {
+
+    //     var t_call = {
+    //         text: "stage",
+    //         stage: GP.data.stage
+    //     }
+    //     APP.globalData.JMessage.sendSingleCustom(APP.globalData.student_name, t_call)
+    //     // APP.globalData.JMessage.sendSingleCustom(student_name, t_call)
+    //     // APP.globalData.JMessage.sendSingleCustom('bushitan', t_call)
+    // },
     
 
     // 倒计时
-    SetCountDown() {
-        var memberTempLive = wx.getStorageSync(KEY.MEMBER_TEMP_LIVE)
-        if (memberTempLive === "" || memberTempLive==0 ){
-            //TODO 踢人下线
-        }
-        else{
+    // SetCountDown() {
+    //     var memberTempLive = wx.getStorageSync(KEY.MEMBER_TEMP_LIVE)
+    //     if (memberTempLive === "" || memberTempLive==0 ){
+    //         //TODO 踢人下线
+    //     }
+    //     else{
 
-            memberTempLive--
-            wx.setStorageSync(KEY.MEMBER_TEMP_LIVE, memberTempLive)
-        }
+    //         memberTempLive--
+    //         wx.setStorageSync(KEY.MEMBER_TEMP_LIVE, memberTempLive)
+    //     }
 
-        var leftTime = 2
-        intervarID = setInterval(
-            function () {
-                // GP.setData({
-                //     clock: '录音倒计时：' + leftTime + "秒"
-                // })
-                console.log(leftTime)
-                leftTime = leftTime - 1
-                if (leftTime == 0) {
-                    clearInterval(intervarID);
-                    GP.getOut() //踢下线
+    //     var leftTime = 2
+    //     intervarID = setInterval(
+    //         function () {
+    //             // GP.setData({
+    //             //     clock: '录音倒计时：' + leftTime + "秒"
+    //             // })
+    //             console.log(leftTime)
+    //             leftTime = leftTime - 1
+    //             if (leftTime == 0) {
+    //                 clearInterval(intervarID);
+    //                 GP.getOut() //踢下线
                    
-                }
-            },
-            1000
-        )
-    },
+    //             }
+    //         },
+    //         1000
+    //     )
+    // },
 
-    //踢出去
-    getOut(){
-        wx.showModal({
-            title: '时间到',
-        })
-        var t_call = {
-            text: "time_out",
-        }
-        APP.globalData.JMessage.sendSingleCustom(APP.globalData.student_name, t_call)
-    },
-
-
-    onShareAppMessage: function () {
-        var path = "/pages/student/student?token=" + GP.data.userName  //原始分享路径
-        GP.setData({
-            token: GP.data.userName
-        })
-        return {
-            title: "我给你讲个故事",
-            path: path,
-        }
-    },
+    // //踢出去
+    // getOut(){
+    //     wx.showModal({
+    //         title: '时间到',
+    //     })
+    //     var t_call = {
+    //         text: "time_out",
+    //     }
+    //     APP.globalData.JMessage.sendSingleCustom(APP.globalData.student_name, t_call)
+    // },
 
 
-    /**
-     * 用户点击右上角分享
-     */
-    ott: function () {
 
-        var path = "/pages/student/student?room_key=" + GP.data.roomKey //原始分享路径
-        return {
-            title: "我给你讲个故事",
-            path: path,
-            success: function (res) {
-                if (tempLive <= 0) {
-                    wx.showModal({
-                        title: '临时次数已到',
-                        content: '成为会员可以无限次使用哦',
-                    })
-                }
-            },
-        }
+    // /**
+    //  * 用户点击右上角分享
+    //  */
+    // ott: function () {
 
-        GP.SetCountDown()
+    //     var path = "/pages/student/student?room_key=" + GP.data.roomKey //原始分享路径
+    //     return {
+    //         title: "我给你讲个故事",
+    //         path: path,
+    //         success: function (res) {
+    //             if (tempLive <= 0) {
+    //                 wx.showModal({
+    //                     title: '临时次数已到',
+    //                     content: '成为会员可以无限次使用哦',
+    //                 })
+    //             }
+    //         },
+    //     }
 
-
-        var _live = 1 //每日免费次数
-        var _today = new Date().getDay()
-        var tempLive = wx.getStorageSync(KEY.MEMBER_TEMP_LIVE)
-        var path = "/pages/student/student?room_key=" + GP.data.roomKey //原始分享路径
+    //     GP.SetCountDown()
 
 
-        var refreshDay = wx.getStorageSync(KEY.MEMBER_REFRESH_DAY)
-        if (refreshDay != _today) {  //日期不一样，重置次数
-            tempLive = _live
-            refreshDay = _today
-            wx.setStorageSync(KEY.MEMBER_TEMP_LIVE, tempLive)
-            wx.setStorageSync(KEY.MEMBER_REFRESH_DAY, refreshDay)
-        }
+    //     var _live = 1 //每日免费次数
+    //     var _today = new Date().getDay()
+    //     var tempLive = wx.getStorageSync(KEY.MEMBER_TEMP_LIVE)
+    //     var path = "/pages/student/student?room_key=" + GP.data.roomKey //原始分享路径
 
-        if (tempLive <= 0) { //分享次数没有，让学生直接跳到首页
-            path = "/pages/index/index?time_out=true" //让受邀请的用户直接进入首页
-        }
-        return {
-            title: "我给你讲个故事",
-            path: path,
-            success:function(res){
-                if (tempLive <= 0) {
-                    wx.showModal({
-                        title: '临时次数已到',
-                        content: '成为会员可以无限次使用哦',
-                    })
-                }
-            },
-        }
-    }
+
+    //     var refreshDay = wx.getStorageSync(KEY.MEMBER_REFRESH_DAY)
+    //     if (refreshDay != _today) {  //日期不一样，重置次数
+    //         tempLive = _live
+    //         refreshDay = _today
+    //         wx.setStorageSync(KEY.MEMBER_TEMP_LIVE, tempLive)
+    //         wx.setStorageSync(KEY.MEMBER_REFRESH_DAY, refreshDay)
+    //     }
+
+    //     if (tempLive <= 0) { //分享次数没有，让学生直接跳到首页
+    //         path = "/pages/index/index?time_out=true" //让受邀请的用户直接进入首页
+    //     }
+    //     return {
+    //         title: "我给你讲个故事",
+    //         path: path,
+    //         success:function(res){
+    //             if (tempLive <= 0) {
+    //                 wx.showModal({
+    //                     title: '临时次数已到',
+    //                     content: '成为会员可以无限次使用哦',
+    //                 })
+    //             }
+    //         },
+    //     }
+    // }
 })
