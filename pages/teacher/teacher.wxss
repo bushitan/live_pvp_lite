@@ -142,7 +142,7 @@
     bottom: 10px;
 }
 
-.share_shu image {    margin: 8px;}
+.share_shu image {    margin: 3px 7px;}
 .theme_shu image{    margin: 7px 3px 6px;}
 .next_shu image,.back_shu image , .cancel_shu image{    margin: 6px;}
 
@@ -182,8 +182,9 @@
     justify-content: center;
     width: 750rpx; 
     margin: auto;
-    position: absolute;
+    position: fixed;
     bottom: 20px;
+    z-index: 99999;
 }
 .theme_cancel .bg{
     width: 48px;
@@ -220,5 +221,6 @@ button{
     overflow:hidden;
     color:#000000;
     background-color:#F8F8F8;
+    padding:0 !important;
 
 }

@@ -5,19 +5,21 @@
     <!-- 在stage中更换主题 -->
     <view wx:if="{{showTheme}}">
         <scroll-view scroll-y style='height:100vh'>
+            <template is="story_list" data="{{storyList,click:'clickStoryImage'}}" ></template>
             <view class="theme_cancel" >
                 <view class='bg'>
                     <image src='../../images/cancel_heng.png'   catchtap='themeSwitch'></image>
                 </view>
                 <!-- <icon type='cancel' size="30"  catchtap='themeSwitch'  ></icon> -->
             </view>
-            <template is="story_list" data="{{storyList,click:'clickStoryImage'}}" ></template>
         </scroll-view>
     </view>
     <!-- stage，包含背景、推流、播放视频 3个元素 -->
     <view class='stage_box'>
-        <template is="stage" data="{{stage , clickBG:'menuSwitch'}}"></template>
+        <template is="stage" 
+        data="{{stage ,playerSrc:liveConfig.teacherPlayer ,pusherSrc:liveConfig.teacherPusher , clickBG:'menuSwitch'}}"></template>
     </view>
+    <!-- studentPlayer -->
 </view>
 
  <!-- hidden='{{!show.menu}}' -->
@@ -27,7 +29,7 @@
     <!-- <button size='mini' class='new_heng' catchtap='themeSwitch'>换主题</button> -->
     <!-- <button size='mini' class='share_heng' open-type="share">邀请好友</button> -->
     <!-- <button size='mini' class='share_heng' catchtap='sendStage'>邀请好友</button> -->
-    <block wx:if="{{isHeng}}"> 
+    <block wx:if="{{!isHeng}}"> 
         <label class='cancel'>
             <image src='../../images/cancel_heng.png'   catchtap='stageClose'></image>
         </label>

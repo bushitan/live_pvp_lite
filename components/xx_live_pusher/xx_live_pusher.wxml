@@ -1,6 +1,6 @@
 
 
-
+<!--  -->
  <view class='live' style='height: {{height}};' catchtap='showMenu'> 
   <live-pusher url="rtmp://video-center.alivecdn.com/AppName/StreamName?vhost=live.12xiong.top" 
     id="pusher"

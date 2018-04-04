@@ -4,9 +4,12 @@ Component({
    * 组件的属性列表
    */
     properties: {
+        //播放地址
         src:{
             type: String,
-            value: "rtmp://live.12xiong.top/AppName/StreamName",
+            value: "",
+            // value: "rtmp://live.12xiong.top/AppName/StreamName",
+            // 
         },
         messages: {
             type: Array,
@@ -176,6 +179,17 @@ Component({
                 index: e.detail.value
             })
             this.triggerEvent('change', e.detail.value);
-        }
+        },
+
+
+        statechange(e) {
+            console.log('live-player code:', e.detail.code)
+        },
+        statechangePlayer(e) {
+            console.log('live-player code:', e.detail.code)
+        },
+        error(e) {
+            console.error('live-player error:', e.detail.errMsg)
+        },
     }
 })

@@ -28,6 +28,8 @@ Page({
         teacherName: null, //IM账号
         passWord: null, //IM密码
         studentName: null, //IM账号
+
+        liveConfig:{},//直播配置
     },
 
     /**
@@ -49,7 +51,9 @@ Page({
             JMessage.sendSingleCustom(GP.data.studentName, t_call)
             wx.navigateBack({})
         }
-            
+        // wx.redirectTo({
+        //     url: '/pages/index/index',
+        // })
 
     },
     // 换主题
@@ -132,20 +136,40 @@ Page({
             stage: _stage,
             storyList: APP.globalData.storyList,
             isMember: APP.globalData.isMember, //是否会员
+            isHeng: _stage.stage_orientation == KEY.HORIZONTAL? true:false, //设置方向
         })
 
         Scripte.Init(APP, GP, API, JMessage) //初始化脚本
         GP.initIM()
-        // GP.createRoomSuccess()
-        // GP.connectIMSuccess()        
+        GP.initMusic(_stage.stage_background_audio)
+
     },
 
+    initMusic(src){
+        const innerAudioContext = wx.createInnerAudioContext()
+        // innerAudioContext.autoplay = true
+        innerAudioContext.src = src
+        innerAudioContext.loop = true
+        innerAudioContext.play()
+    },
 
     initIM(){
         var user_info = wx.getStorageSync(KEY.USER_INFO)
+        var domain = "?vhost=live.12xiong.top"
+        var pushBase = "rtmp://video-center.alivecdn.com/pvplive/"
+        var playerBase = "rtmp://live.12xiong.top/pvplive/"
+        var liveConfig = {
+            teacherPusher: pushBase + "room_" + user_info.user_id + "_teacher" + domain,
+            teacherPlayer: playerBase + "room_" + user_info.user_id + "_teacher" ,
+            studentPusher: pushBase + "room_" + user_info.user_id + "_student" + domain,
+            studentPlayer: playerBase + "room_" + user_info.user_id + "_student",
+        }
+        console.log(liveConfig)
+
         var teacherName = "live_pvp_user_" + user_info.user_id
         var passWord = "123"
         GP.setData({
+            liveConfig:liveConfig,
             teacherName: teacherName,
             passWord: passWord,
         })

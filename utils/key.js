@@ -18,7 +18,12 @@ module.exports = {
     YES: 1,
     NO: 0,
     
+    //信息类别
     MESSAGE_TEXT: 0,
     MESSAGE_IMAGE: 1,
     MESSAGE_AUDIO: 2,
+
+    //屏幕方向
+    VERTICAL : 0, //横屏
+    HORIZONTAL : 1, //竖屏
 }

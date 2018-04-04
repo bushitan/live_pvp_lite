@@ -36,10 +36,11 @@ module.exports = new (function () {
                 studentName: student_name,
                 token:null,
                 isOnline:true,
+                liveConfig: liveConfig,
             })
             this.sendStage()
         }
-        else{
+        else{ //分享过期
             var s_say = {
                 text: "expire",
                 student_name: student_name

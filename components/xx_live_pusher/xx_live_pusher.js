@@ -31,6 +31,11 @@ Component({
           type: String,
           value: "vertical",
         },
+        //推流地址
+        src: {
+            type: String,
+            value: "",
+        },
 
   },
 

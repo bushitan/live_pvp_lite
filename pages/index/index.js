@@ -48,8 +48,10 @@ Page({
     },
     //点击图片，选择场景
     clickStoryImage(e) {
+        // var rol = e.detail.rol
+        // var col = e.detail.col
         var rol = e.detail.rol
-        var col = e.detail.col
+        var col = 0 //默认第一个
         GP.setData({
             rol:rol,
             col:col,
