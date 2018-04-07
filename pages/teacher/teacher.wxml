@@ -17,7 +17,7 @@
     <!-- stage，包含背景、推流、播放视频 3个元素 -->
     <view class='stage_box'>
         <template is="stage" 
-        data="{{stage ,playerSrc:liveConfig.teacherPlayer ,pusherSrc:liveConfig.teacherPusher , clickBG:'menuSwitch'}}"></template>
+        data="{{stage ,playerSrc:liveConfig.studentPlayer ,pusherSrc:liveConfig.teacherPusher , clickBG:'menuSwitch'}}"></template>
     </view>
     <!-- studentPlayer -->
 </view>

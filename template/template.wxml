@@ -70,7 +70,7 @@
     <button catchtap='toTeacherPhone'>名师电话</button>
 </template>
 
-
+<!-- orientation="{{stage.stage_orientation}}" -->
 
 <!-- 会员订单 -->
 <template name="stage">
@@ -84,7 +84,7 @@
         </view> 
         <!-- 推流 -->
         <view class='pusher_default' style='top: {{stage.pusher_y}};left: {{stage.pusher_x}};' >
-            <xx-live-pusher src="{{pusherSrc}}" width="{{stage.pusher_width}}" height="{{stage.pusher_height}}" menu="{{false}}" ></xx-live-pusher> 
+            <xx-live-pusher src="{{pusherSrc}}" orientation="horizontal"  width="{{stage.pusher_width}}" height="{{stage.pusher_height}}" menu="{{false}}" ></xx-live-pusher> 
         </view>
     </view>
 </template>

@@ -4,13 +4,6 @@ Component({
    * 组件的属性列表
    */
     properties: {
-        //播放地址
-        src:{
-            type: String,
-            value: "",
-            // value: "rtmp://live.12xiong.top/AppName/StreamName",
-            // 
-        },
         messages: {
             type: Array,
             value: [],
@@ -24,6 +17,18 @@ Component({
             type: String,
             // value: "100vh",
             value: "400rpx",
+        },
+        // 屏幕方向
+        orientation: {
+            type: String,
+            value: "vertical",
+        },
+        //播放地址
+        src: {
+            type: String,
+            value: "",
+            // value: "rtmp://live.12xiong.top/AppName/StreamName",
+            // 
         },
   },
 

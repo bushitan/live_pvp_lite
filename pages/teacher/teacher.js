@@ -80,6 +80,8 @@ Page({
             showTheme: false,
             showTool: true,
         })
+        
+        Scripte.sendStage()
 
         //4 im 更换主题，想学生发送消息
         if (GP.data.studentName == null){
@@ -139,11 +141,39 @@ Page({
             isHeng: _stage.stage_orientation == KEY.HORIZONTAL? true:false, //设置方向
         })
 
-        Scripte.Init(APP, GP, API, JMessage) //初始化脚本
-        GP.initIM()
+        GP.setData({
+            liveConfig: APP.globalData.liveConfig ,
+            teacherName: APP.globalData.liveConfig.teacherName,
+        })
+        
+
+        Scripte.Init(APP, GP, API, APP.globalData.JMessage) //初始化脚本
+        // GP.initIM()
         GP.initMusic(_stage.stage_background_audio)
 
     },
+
+
+    IMSuccess() {
+        console.log('teacher login success')
+    },
+    //接收IM信息
+    IMMsgReceive(data) {
+        var body = data.messages[0].content.msg_body
+
+        if (body.text == "check") { //接收学生的上线信息
+            Scripte.getCheck(body.student_name, body.token)
+        }
+
+        // if (body.text == "on") { //接收学生的上线信息
+        //     GP.getStudentOnline(body.student_name)
+        // }
+
+        if (body.text == "off") { //接收学生的下信息
+            Scripte.getStudentOffline(body.student_name)
+        }
+    },
+
 
     initMusic(src){
         const innerAudioContext = wx.createInnerAudioContext()
@@ -152,66 +182,68 @@ Page({
         innerAudioContext.loop = true
         innerAudioContext.play()
     },
-
-    initIM(){
-        var user_info = wx.getStorageSync(KEY.USER_INFO)
-        var domain = "?vhost=live.12xiong.top"
-        var pushBase = "rtmp://video-center.alivecdn.com/pvplive/"
-        var playerBase = "rtmp://live.12xiong.top/pvplive/"
-        var liveConfig = {
-            teacherPusher: pushBase + "room_" + user_info.user_id + "_teacher" + domain,
-            teacherPlayer: playerBase + "room_" + user_info.user_id + "_teacher" ,
-            studentPusher: pushBase + "room_" + user_info.user_id + "_student" + domain,
-            studentPlayer: playerBase + "room_" + user_info.user_id + "_student",
-        }
-        console.log(liveConfig)
-
-        var teacherName = "live_pvp_user_" + user_info.user_id
-        var passWord = "123"
-        GP.setData({
-            liveConfig:liveConfig,
-            teacherName: teacherName,
-            passWord: passWord,
-        })
-        JMessage.init("", teacherName, passWord, GP.IMSuccess);
-    },
-
-    IMSuccess(){
-        JMessage.JIM.onMsgReceive(function (data) {
-            var body = data.messages[0].content.msg_body
-
-            if (body.text == "check") { //接收学生的上线信息
-                Scripte.getCheck(body.student_name, body.token)
-            }
-
-            // if (body.text == "on") { //接收学生的上线信息
-            //     GP.getStudentOnline(body.student_name)
-            // }
-
-            if (body.text == "off") { //接收学生的下信息
-                Scripte.getStudentOffline(body.student_name)
-            }
-
-        })
-    },
-
     onShareAppMessage: function () {
         var newToken = "1"
         var path = "/pages/student/student?teacher_name=" + GP.data.teacherName + "&token=" + newToken //原始分享路径
         GP.setData({
             token: newToken
         })
+        console.log(path)
         return {
             title: "我给你讲个故事",
             path: path,
         }
     },
 
-    onUnload(){
-        JMessage.JIM.loginOut();
-    },
+    // onUnload() {
+    //     JMessage.JIM.loginOut();
+    // },
 
+})
 
+    // initIM(){
+    //     var user_info = wx.getStorageSync(KEY.USER_INFO)
+    //     var domain = "?vhost=live.12xiong.top"
+    //     var pushBase = "rtmp://video-center.alivecdn.com/pvplive/"
+    //     var playerBase = "rtmp://live.12xiong.top/pvplive/"
+    //     var liveConfig = {
+    //         teacherPusher: pushBase + "room_" + user_info.user_id + "_teacher" + domain,
+    //         teacherPlayer: playerBase + "room_" + user_info.user_id + "_teacher" ,
+    //         studentPusher: pushBase + "room_" + user_info.user_id + "_student" + domain,
+    //         studentPlayer: playerBase + "room_" + user_info.user_id + "_student",
+    //     }
+    //     console.log(liveConfig)
+
+    //     var teacherName = "live_pvp_user_" + user_info.user_id
+    //     var passWord = "123"
+    //     GP.setData({
+    //         liveConfig:liveConfig,
+    //         teacherName: teacherName,
+    //         passWord: passWord,
+    //     })
+    //     JMessage.init("", teacherName, passWord, GP.IMSuccess);
+    // },
+
+    // IMSuccess(){
+    //     JMessage.JIM.onMsgReceive(function (data) {
+    //         var body = data.messages[0].content.msg_body
+
+    //         if (body.text == "check") { //接收学生的上线信息
+    //             Scripte.getCheck(body.student_name, body.token)
+    //         }
+
+    //         // if (body.text == "on") { //接收学生的上线信息
+    //         //     GP.getStudentOnline(body.student_name)
+    //         // }
+
+    //         if (body.text == "off") { //接收学生的下信息
+    //             Scripte.getStudentOffline(body.student_name)
+    //         }
+
+    //     })
+    // },
+
+   
 
 
 
@@ -368,4 +400,3 @@ Page({
     //         },
     //     }
     // }
-})

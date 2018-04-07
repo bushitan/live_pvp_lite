@@ -36,8 +36,9 @@ module.exports = new (function () {
                 studentName: student_name,
                 token:null,
                 isOnline:true,
-                liveConfig: liveConfig,
+                // liveConfig: liveConfig,
             })
+            this.sendStudentOnline()
             this.sendStage()
         }
         else{ //分享过期
@@ -58,7 +59,14 @@ module.exports = new (function () {
         }
         JMessage.sendSingleCustom(GP.data.studentName, t_call)
     }
-
+    this.sendStudentOnline = function () {
+        console.log
+        var t_call = {
+            text: "on",
+            liveConfig: GP.data.liveConfig
+        }
+        JMessage.sendSingleCustom(GP.data.studentName, t_call)
+    }
     this.getStudentOffline = function(){
         wx.showModal({
             title: '学生下线',

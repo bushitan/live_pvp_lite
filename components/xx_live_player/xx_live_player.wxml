@@ -10,7 +10,7 @@
 <view class='live' style='width:{{width}};height: {{height}};' catchtap='showMenu'>
     <live-player 
         id="player"
-        src="rtmp://live.12xiong.top/AppName/StreamName"  
+        src="{{src}}"  
         mode="SD"  
         orientation="{{orientation}}"
         object-fit="fillCrop"

@@ -3,10 +3,8 @@
 const APP = getApp()
 var API = require('../../utils/api.js');
 var Scripte = require('scripte.js');
-var JMessage = require('../../utils/im/jm.js')
-
-var teacher = "live_app_3"
-var student = 'live_pvp_user_5'
+var KEY = require('../../utils/key.js');
+// var JMessage = require('../../utils/im/jm.js')
 var GP
 Page({
     data: {
@@ -18,8 +16,9 @@ Page({
         rol:0,
         col:0,
 
-        userName: "live_app_3",//老师
+        userName: "",//老师名字
         // userName:'live_pvp_user_5', //学生
+
         //页面显示
         show:{
             stage: false, //直播舞台
@@ -28,7 +27,6 @@ Page({
             story: true, //故事菜单
             member: false,  //会员支付
         },
-
 
         playerTab:["选故事","会员"],
         
@@ -62,7 +60,6 @@ Page({
         wx.navigateTo({
             url: '/pages/teacher/teacher?' + options,
         })
-
         return
     },
 
@@ -87,24 +84,57 @@ Page({
 
 
     onLoad: function (options) {
-
-
         GP = this
-        GP.checkTimeOut(options)
+        APP.globalData.currentPage = this //当前页面的钩子
+        // GP.checkTimeOut(options)
         // GP.onInit()
-        Scripte.Init(APP, GP, API, JMessage)
+        Scripte.Init(APP, GP, API, APP.globalData.JMessage)
+        GP.initIM()
         GP.getStoryList()
         GP.checkMember()
-     
     },
+
+    /**IM初始化 */
+    initIM(){
+        var user_info = wx.getStorageSync(KEY.USER_INFO)
+        var domain = "?vhost=live.12xiong.top"
+        var pushBase = "rtmp://video-center.alivecdn.com/pvplive/"
+        var playerBase = "rtmp://live.12xiong.top/pvplive/"
+        var teacherName = "live_pvp_user_" + user_info.user_id
+        var passWord = "123"
+
+        var liveConfig = {
+            teacherName: teacherName,
+            teacherPusher: pushBase + "room_" + user_info.user_id + "_teacher" + domain,
+            teacherPlayer: playerBase + "room_" + user_info.user_id + "_teacher",
+            studentPusher: pushBase + "room_" + user_info.user_id + "_student" + domain,
+            studentPlayer: playerBase + "room_" + user_info.user_id + "_student",
+        }
+        console.log(liveConfig)
+
+        GP.setData({
+            liveConfig: liveConfig,
+            teacherName: teacherName,
+            passWord: passWord,
+        })
+        APP.globalData.liveConfig = liveConfig
+        APP.initIM(teacherName, passWord)
+    },
+    IMSuccess(){
+        console.log('denglu chen gong')
+    },
+    IMMsgReceive(){
+        
+    },
+
     //次数超时的提示
-    checkTimeOut(options){
-        if (options.time_out != undefined)
-            wx.showModal({
-                title: '老师今天的次数已经用光',
-                content: '你可以再邀请他一次，每天有2次机会哦',
-            })
-    },
+    // checkTimeOut(options){
+    //     if (options.time_out != undefined)
+    //         wx.showModal({
+    //             title: '老师今天的次数已经用光',
+    //             content: '你可以再邀请他一次，每天有2次机会哦',
+    //         })
+    // },
     //获取故事列表
     getStoryList() {
         API.Request({
