@@ -16,8 +16,34 @@
     </view>
     <!-- stage，包含背景、推流、播放视频 3个元素 -->
     <view class='stage_box'>
-        <template is="stage" 
-        data="{{stage ,playerSrc:liveConfig.studentPlayer ,pusherSrc:liveConfig.teacherPusher , clickBG:'menuSwitch'}}"></template>
+        <!-- <template is="stage" 
+        data="{{stage ,playerSrc:liveConfig.studentPlayer ,pusherSrc:liveConfig.teacherPusher , clickBG:'menuSwitch'}}"></template> -->
+        <view class='stage'>
+            <!-- 背景 -->
+            <image src='{{stage.stage_background_image}}' style='width: {{stage.stage_width}};' mode='widthFix' catchtap='menuSwitch'></image>
+            <!-- 播放视频 -->
+            <view class='player_default' style='top: {{stage.player_y}};left: {{stage.player_x}};'>
+                <xx-live-player 
+                    orientation="{{stage.stage_orientation}}"  
+                    wx:if="{{liveConfig.studentPlayer}}"
+                    src="{{liveConfig.studentPlayer}}" 
+                    width="{{stage.player_width}}" 
+                    height="{{stage.player_height}}" 
+                    coverImage="{{stage.player_image}}" >
+                </xx-live-player> 
+            </view> 
+            <!-- 推流 -->
+            <view class='pusher_default' style='top: {{stage.pusher_y}};left: {{stage.pusher_x}};' >
+                <xx-live-pusher 
+                    src="{{liveConfig.teacherPusher}}" 
+                    orientation="{{stage.stage_orientation}}"
+                    width="{{stage.pusher_width}}" 
+                    height="{{stage.pusher_height}}" 
+                    menu="{{false}}" 
+                    coverImage="{{stage.pusher_image}}">
+                </xx-live-pusher> 
+            </view>
+        </view>        
     </view>
     <!-- studentPlayer -->
 </view>
@@ -29,7 +55,7 @@
     <!-- <button size='mini' class='new_heng' catchtap='themeSwitch'>换主题</button> -->
     <!-- <button size='mini' class='share_heng' open-type="share">邀请好友</button> -->
     <!-- <button size='mini' class='share_heng' catchtap='sendStage'>邀请好友</button> -->
-    <block wx:if="{{!isHeng}}"> 
+    <block wx:if="{{stage.stage_orientation == 'horizontal'}}"> 
         <label class='cancel'>
             <image src='../../images/cancel_heng.png'   catchtap='stageClose'></image>
         </label>

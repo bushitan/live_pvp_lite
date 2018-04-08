@@ -6,7 +6,6 @@
         msg : getFirst,
     }
 </wxs>
-3
 <view class='live' style='width:{{width}};height: {{height}};' catchtap='showMenu'>
     <live-player 
         id="player"
@@ -16,7 +15,7 @@
         object-fit="fillCrop"
         autoplay bindstatechange="statechangePlayer"    binderror="error"  >
         
-        <cover-image src='../../images/player_logo.png'></cover-image>
+        <cover-image src='{{coverImage}}'></cover-image>
              <!-- <template is="menu_full" data="{{isShowMenu,isPlay,isVoice}}"   wx:if="{{isFullScreen}}"></template>
              <template is="menu_lite" data="{{isShowMenu,isPlay,isVoice}}"  wx:else></template>
             

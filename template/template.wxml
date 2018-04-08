@@ -79,12 +79,25 @@
         <image src='{{stage.stage_background_image}}' style='width: {{stage.stage_width}};' mode='widthFix' catchtap='{{clickBG}}'></image>
         <!-- 播放视频 -->
         <view class='player_default' style='top: {{stage.player_y}};left: {{stage.player_x}};'>
-            <xx-live-player orientation="horizontal"  src="{{playerSrc}}" width="{{stage.player_width}}" height="{{stage.player_height}}" >
+            <xx-live-player 
+                orientation="horizontal"  
+                wx:if="{{playerSrc}}"
+                src="{{playerSrc}}" 
+                width="{{stage.player_width}}" 
+                height="{{stage.player_height}}"
+                >
+               
             </xx-live-player> 
         </view> 
         <!-- 推流 -->
         <view class='pusher_default' style='top: {{stage.pusher_y}};left: {{stage.pusher_x}};' >
-            <xx-live-pusher src="{{pusherSrc}}" orientation="horizontal"  width="{{stage.pusher_width}}" height="{{stage.pusher_height}}" menu="{{false}}" ></xx-live-pusher> 
+            <xx-live-pusher 
+                src="{{pusherSrc}}" 
+                orientation="horizontal"  
+                width="{{stage.pusher_width}}" 
+                height="{{stage.pusher_height}}" 
+                menu="{{false}}" >
+            </xx-live-pusher> 
         </view>
     </view>
 </template>

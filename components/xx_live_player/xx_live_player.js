@@ -30,6 +30,12 @@ Component({
             // value: "rtmp://live.12xiong.top/AppName/StreamName",
             // 
         },
+        //封面图片
+        coverImage: {
+            type: String,
+            value: "",
+        },
+        
   },
 
   /**

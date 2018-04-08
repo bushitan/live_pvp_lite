@@ -22,7 +22,7 @@ Page({
         isOnline:false, //学生未上线
         showTheme:false, //显示主题
         showTool:true,//显示根据
-        isHeng:false,//是否横屏
+        // isHeng:false,//是否横屏
 
         token:null,//验证是否能够连接
         teacherName: null, //IM账号
@@ -37,24 +37,22 @@ Page({
      */
     //点击背景图，打开菜单
     stageClose() {
-        if (GP.data.studentName == null) {
-            // console.log(JMessage.JIM.loginOut())
-            
-            wx.navigateBack({})
-            
-        }
-        else{
-            var t_call = {
-                text: "off",
-                stage: GP.data.stage
-            }
-            JMessage.sendSingleCustom(GP.data.studentName, t_call)
-            wx.navigateBack({})
-        }
-        // wx.redirectTo({
-        //     url: '/pages/index/index',
-        // })
-
+        wx.showModal({
+            title: '退出房间',
+            content:"退出后通话将断开",
+            success:function(res){
+                if(res.confirm){
+                    if (GP.data.studentName != null) {
+                        var t_call = {
+                            text: "off",
+                            stage: GP.data.stage
+                        }
+                        JMessage.sendSingleCustom(GP.data.studentName, t_call)
+                    }
+                    wx.navigateBack({})
+                }
+            },
+        })
     },
     // 换主题
     themeSwitch() {
@@ -138,14 +136,24 @@ Page({
             stage: _stage,
             storyList: APP.globalData.storyList,
             isMember: APP.globalData.isMember, //是否会员
-            isHeng: _stage.stage_orientation == KEY.HORIZONTAL? true:false, //设置方向
+            // isHeng: _stage.stage_orientation == KEY.HORIZONTAL? true:false, //设置方向
         })
 
+        //学生的player为空
+
+        var liveConfig = {
+            teacherName: APP.globalData.liveConfig.teacherName,
+            teacherPusher: APP.globalData.liveConfig.teacherPusher,
+            teacherPlayer: APP.globalData.liveConfig.teacherPlayer,
+            studentPusher: APP.globalData.liveConfig.studentPusher,
+            studentPlayer: false,
+        }
         GP.setData({
-            liveConfig: APP.globalData.liveConfig ,
+            liveConfig: liveConfig ,
             teacherName: APP.globalData.liveConfig.teacherName,
         })
-        
+
+
 
         Scripte.Init(APP, GP, API, APP.globalData.JMessage) //初始化脚本
         // GP.initIM()
@@ -153,6 +161,12 @@ Page({
 
     },
 
+    onShow(){
+        //保持长列
+        wx.setKeepScreenOn({
+            keepScreenOn: true
+        });
+    },
 
     IMSuccess() {
         console.log('teacher login success')
@@ -162,6 +176,8 @@ Page({
         var body = data.messages[0].content.msg_body
 
         if (body.text == "check") { //接收学生的上线信息
+            console.log(APP.globalData.liveConfig)
+            GP.setData({liveConfig: APP.globalData.liveConfig}) //学生上线后，再设置推流地址
             Scripte.getCheck(body.student_name, body.token)
         }
 
@@ -191,6 +207,7 @@ Page({
         console.log(path)
         return {
             title: "我给你讲个故事",
+            imageUrl: GP.data.stage.stage_cover,
             path: path,
         }
     },

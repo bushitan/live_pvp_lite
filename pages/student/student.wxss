@@ -57,51 +57,39 @@
     z-index: 999;
 
 }
-.new_heng{
-    position: fixed;
-    right: 10px;
-    bottom: 40px;
-}
 .cancel{
     position: fixed;
+    width: 48px;
+    height: 48px;
+    background-color: rgba(136, 136, 136, 0.6);
+    border-radius: 50%;
     right: 10px;
     bottom: 10px;
 }
-.share_heng{
+.cancel image{   
+    width: 36px;
+    height: 36px;
+    margin: 6px;
+}
+.cancel_shu{
     position: fixed;
+    width: 48px;
+    height: 48px;
+    background-color: rgba(136, 136, 136, 0.6);
+    border-radius: 50%;
     left: 10px;
-    top: 40px;
+    top: 30px;
 }
-.next_heng{
-    position: fixed;
-    left: 10px;
-    bottom: 10px;
-    width: 30px;
-    height: 30px;
+.cancel_shu image{
+    width: 36px;
+    height: 36px;
+    margin: 6px;
 }
-.back_heng{
-    position: fixed;
-    left: 10px;
-    bottom: 40px;
-    width: 30px;
-    height: 30px;
-}
-.time_heng{
-    position: fixed;
-    right: 10px;
-    bottom: 80px;
-}
-
-/* 主题 */
-.theme_cancel{
-    /* position: relative; */
-    display: flex;
-    justify-content: center;
-}
-
-.theme_cancel icon{
-    position: absolute;
-    bottom: 20px;
-}
-
 /* .pay{ background-color: #fff;} */
+
+.to_index{
+    width: 630rpx; 
+    margin: 60rpx;
+    position: fixed;
+    bottom: 30px;
+}

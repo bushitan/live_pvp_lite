@@ -27,11 +27,23 @@ Page({
     },
     //点击背景图，打开菜单
     stageClose() {
-        var t_call = {
-            text: "off",
-            // stage: GP.data.stage
-        }
-        JMessage.sendSingleCustom(GP.data.teacherName, t_call)
+        wx.showModal({
+            title: '退出房间',
+            content:"退出后通话将断开",
+            success: function (res) {
+                if (res.confirm) {
+                    var t_call = {
+                        text: "off",
+                    }
+                    JMessage.sendSingleCustom(GP.data.teacherName, t_call)
+                    wx.redirectTo({
+                        url: '/pages/index/index',
+                    })
+                }
+            },
+        })
+    },
+    toIndex(){
         wx.redirectTo({
             url: '/pages/index/index',
         })
@@ -49,13 +61,14 @@ Page({
             teacherName: options.teacher_name,
             token: options.token,
         })
-        //初始化loading图标
+        // 初始化loading图标
         wx.showLoading({
-            title: '教师连麦中',
+            title: '连麦中',
         })
         Scripte.Init(APP, GP, API, APP.globalData.JMessage) //初始化脚本
         GP.initLogin()//初始化登陆
         // GP.checkNetFail() //防止很久没反应
+
 
     },
     checkNetFail(){
@@ -84,8 +97,14 @@ Page({
     //登陆一下，需要user_id
     initLogin() {
         API.Request({
-            url: API.PVP_ROOM_JOIN,
+            // url: API.PVP_ROOM_JOIN,
+            url: API.PVP_STORY_GET_LIST,
+            
             success: function (res) {
+                //测试
+                // GP.setData({
+                //     stage: res.data.stage_list[0].list[0]
+                // })
                 GP.onInitIMStudent()
             },
         })

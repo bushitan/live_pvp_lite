@@ -36,7 +36,11 @@ Component({
             type: String,
             value: "",
         },
-
+        //封面图片
+        coverImage: {
+            type: String,
+            value: "",
+        },
   },
 
   /**
