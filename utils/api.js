@@ -1,11 +1,12 @@
 var KEY = require('key.js');
 
 // var host_url = 'http://192.168.200.103:8000/live/'
-var host_url = 'http://192.168.199.203:8000/live/';
+// var host_url = 'http://192.168.199.203:8000/live/';
 
 // var host_url = 'http://127.0.0.1:8000/live/'; 
 // var host_url = 'https://www.12xiong.top/live/';
-// var host_url = 'https://www.12xiong.top/live/';
+var host_url = 'https://www.12xiong.top/live/';
+// var host_url = 'http://www.12xiong.top:8010/live/';
 
 var wxLoginUrl = host_url + 'lite/login/'
 var APP_ID = "wxddf6b5519a9e3197"
@@ -69,6 +70,7 @@ function InitRequest(options) {
 function _RequestLogin() {
     wx.login({
         success: function (res) {
+            console.log("login insert")
             // var _session = wx.getStorageSync(KEY.SESSION)
             _Request({
                 'live': API_LIVE,
@@ -88,6 +90,9 @@ function _RequestLogin() {
                         _Request(GlobalData.apiPreList[i])
                     }
                     GlobalData.apiPreList = []
+                },
+                'fail':function(res){
+                    console.log("login fail",res)
                 },
             })
         },
@@ -116,16 +121,19 @@ function _Request(options) {
             method: "GET",
             data: data,
             success: function (res) {
+                console.log(res)
                 if (options.success != undefined)
                     options.success(res)
             },
             fail: function (res) {
+                console.log(res)
                 if (options.fail != undefined)
                     options.fail(res)
                 if (options['live'] > 0)
                     GlobalData.apiFailList.push(options) //将请求加入失败队列
             },
             complete: function (res) {
+                console.log(res)
                 if (options.complete != undefined)
                     options.complete(res)
             },

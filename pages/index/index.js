@@ -42,7 +42,7 @@ Page({
             Scripte.ShowStory()
         else
             Scripte.ShowMember()
-
+        // GP.getStoryList()
     },
     //点击图片，选择场景
     clickStoryImage(e) {
@@ -89,9 +89,11 @@ Page({
         // GP.checkTimeOut(options)
         // GP.onInit()
         Scripte.Init(APP, GP, API, APP.globalData.JMessage)
-        GP.initIM()
+
+        console.log("index onLoad")
         GP.getStoryList()
-        GP.checkMember()
+        // GP.initIM()
+        // GP.checkMember()
     },
 
     /**IM初始化 */
@@ -137,15 +139,21 @@ Page({
     // },
     //获取故事列表
     getStoryList() {
+
+        console.log("getStoryList")
         API.Request({
             url: API.PVP_STORY_GET_LIST,
             success: function (res) {
-                console.log(res.data)
+                console.log('getStoryList success',res.data)
                 APP.globalData.storyList = res.data.stage_list
                 GP.setData({
                     storyList: res.data.stage_list,
                 })
                 // wx.setStorageSync("story_list", res.data.stage_list)
+            },
+            fail(res){
+
+                console.log('getStoryList fail', res.data)
             },
         })
      },
