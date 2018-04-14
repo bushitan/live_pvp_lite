@@ -92,7 +92,7 @@ Page({
 
         console.log("index onLoad")
         GP.getStoryList()
-        // GP.initIM()
+        GP.initIM()
         // GP.checkMember()
     },
 
