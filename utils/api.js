@@ -26,7 +26,9 @@ function Request(options) {
 // 初始化
 function Init() {
     APP = getApp()
-    console.log(APP)
+    // console.log("12321")
+    // console.log(APP)
+    // console.log("12321546")
     GlobalData = APP.globalData
     //初始化 全局变量
     if (GlobalData.apiIsLogin == undefined) {
@@ -80,6 +82,7 @@ function _RequestLogin() {
                     // session: _session,
                 },
                 'success': function (res) {
+                    console.log("login success", res)
                     var object = res.data
                     wx.setStorageSync(KEY.SESSION, res.data.dict_user.session)
                     wx.setStorageSync(KEY.USER_INFO, res.data.dict_user)
@@ -97,7 +100,7 @@ function _RequestLogin() {
             })
         },
         fail:function(res){
-            console.log("fail",res)
+            console.log(" wx.login fail",res)
         },
     });
 }
@@ -121,19 +124,19 @@ function _Request(options) {
             method: "GET",
             data: data,
             success: function (res) {
-                console.log(res)
+                // console.log(res)
                 if (options.success != undefined)
                     options.success(res)
             },
             fail: function (res) {
-                console.log(res)
+                // console.log(res)
                 if (options.fail != undefined)
                     options.fail(res)
                 if (options['live'] > 0)
                     GlobalData.apiFailList.push(options) //将请求加入失败队列
             },
             complete: function (res) {
-                console.log(res)
+                // console.log(res)
                 if (options.complete != undefined)
                     options.complete(res)
             },

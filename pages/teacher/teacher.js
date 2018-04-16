@@ -9,7 +9,7 @@ var teacher = "live_app_3"
 var student = 'live_pvp_user_5'
 var GP
 var intervarID
-
+var innerAudioContext 
 
 Page({
 
@@ -24,7 +24,8 @@ Page({
         showTool:true,//显示根据
         // isHeng:false,//是否横屏
 
-        token:null,//验证是否能够连接
+        // token: null,//验证是否能够连接
+        token: "1",//验证是否能够连接
         teacherName: null, //IM账号
         passWord: null, //IM密码
         studentName: null, //IM账号
@@ -139,6 +140,7 @@ Page({
             // isHeng: _stage.stage_orientation == KEY.HORIZONTAL? true:false, //设置方向
         })
 
+        wx.setStorageSync('stage', _stage)
         //学生的player为空
 
         var liveConfig = {
@@ -192,7 +194,9 @@ Page({
 
 
     initMusic(src){
-        const innerAudioContext = wx.createInnerAudioContext()
+        console.log(src)
+        innerAudioContext = wx.createInnerAudioContext()
+        console.log(innerAudioContext)
         // innerAudioContext.autoplay = true
         innerAudioContext.src = src
         innerAudioContext.loop = true
@@ -212,9 +216,10 @@ Page({
         }
     },
 
-    // onUnload() {
-    //     JMessage.JIM.loginOut();
-    // },
+    onUnload() {
+        innerAudioContext.destroy()
+        // JMessage.JIM.loginOut();
+    },
 
 })
 

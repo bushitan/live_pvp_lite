@@ -7,6 +7,7 @@ var JMessage = require('../../utils/im/jm.js')
 
 var GP
 var intervarID
+var innerAudioContext 
 
 Page({
 
@@ -14,7 +15,8 @@ Page({
      * 页面的初始数据
      */
     data: {
-        isConnectSuccess:false,
+        isConnectSuccess: true,
+        // isConnectSuccess: false,
         showTool: true,
 
         teacherName: null,  //教师名字
@@ -66,7 +68,13 @@ Page({
             title: '连麦中',
         })
         Scripte.Init(APP, GP, API, APP.globalData.JMessage) //初始化脚本
+
+        //TODO Test
+        // var stage = wx.getStorageSync("stage")
+        // Scripte.getStageChange(stage)
+
         GP.initLogin()//初始化登陆
+        
         // GP.checkNetFail() //防止很久没反应
 
 
@@ -142,8 +150,9 @@ Page({
             Scripte.expire()
         }
         if (body.text == "stage") { //切换场景
-            console.log(body)
+            // console.log(body)
             Scripte.getStageChange(body.stage)
+            GP.initMusic(body.stage.stage_background_audio)
         }
         if (body.text == "on") {  //连接成功
             wx.hideLoading()
@@ -160,9 +169,24 @@ Page({
         }
     },
 
+
+    initMusic(src) {
+        console.log(src)
+        innerAudioContext = wx.createInnerAudioContext()
+        console.log(innerAudioContext)
+        // innerAudioContext.autoplay = true
+        innerAudioContext.src = src
+        innerAudioContext.loop = true
+        innerAudioContext.play()
+    },
     onShareAppMessage: function () {
 
-    }
+    },
+    
+    onUnload() {
+        innerAudioContext.destroy()
+        // JMessage.JIM.loginOut();
+    },
 })
 
 

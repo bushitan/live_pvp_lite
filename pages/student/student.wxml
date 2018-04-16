@@ -18,7 +18,9 @@
                     orientation="{{stage.stage_orientation}}"  
                     src="{{liveConfig.teacherPlayer}}" 
                     width="{{stage.pusher_width}}" 
-                    height="{{stage.pusher_height}}" >
+                    height="{{stage.pusher_height}}"
+                    coverImage="{{stage.pusher_image}}"
+                >
                 </xx-live-player> 
             </view> 
             <!-- 推流 -->
@@ -28,7 +30,9 @@
                     orientation="{{stage.stage_orientation}}"  
                     width="{{stage.player_width}}" 
                     height="{{stage.player_height}}" 
-                    menu="{{false}}" >
+                    menu="{{false}}" 
+                    coverImage="{{stage.player_image}}"
+                >
                 </xx-live-pusher> 
             </view>
         </view>

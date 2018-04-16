@@ -28,7 +28,8 @@ Page({
             member: false,  //会员支付
         },
 
-        playerTab:["选故事","会员"],
+        playerTab: ["选故事"],
+        // playerTab: ["选故事", "会员"],
         
     },
 
@@ -82,19 +83,33 @@ Page({
         }
     },
 
+    playMusic(){
+        //clear music
+        const innerAudioContext = wx.createInnerAudioContext()
+        // console.log(innerAudioContext)
+        // // innerAudioContext.autoplay = true
+        var src = "http://img.12xiong.top/live_bg_index.mp3"
+        innerAudioContext.src = src
+        innerAudioContext.volume = 0.3
+        
+        innerAudioContext.loop = false
+        innerAudioContext.play()
+    },
 
     onLoad: function (options) {
+        console.log("index onLoad")
         GP = this
         APP.globalData.currentPage = this //当前页面的钩子
         // GP.checkTimeOut(options)
         // GP.onInit()
         Scripte.Init(APP, GP, API, APP.globalData.JMessage)
 
-        console.log("index onLoad")
         GP.getStoryList()
         GP.initIM()
         // GP.checkMember()
+        // GP.playMusic()
     },
+    
 
     /**IM初始化 */
     initIM(){
@@ -112,7 +127,7 @@ Page({
             studentPusher: pushBase + "room_" + user_info.user_id + "_student" + domain,
             studentPlayer: playerBase + "room_" + user_info.user_id + "_student",
         }
-        console.log(liveConfig)
+        // console.log(liveConfig)
 
         GP.setData({
             liveConfig: liveConfig,
@@ -123,7 +138,7 @@ Page({
         APP.initIM(teacherName, passWord)
     },
     IMSuccess(){
-        console.log('denglu chen gong')
+        // console.log('denglu chen gong')
     },
     IMMsgReceive(){
         
@@ -140,11 +155,11 @@ Page({
     //获取故事列表
     getStoryList() {
 
-        console.log("getStoryList")
+        // console.log("getStoryList")
         API.Request({
             url: API.PVP_STORY_GET_LIST,
             success: function (res) {
-                console.log('getStoryList success',res.data)
+                // console.log('getStoryList success',res.data)
                 APP.globalData.storyList = res.data.stage_list
                 GP.setData({
                     storyList: res.data.stage_list,
@@ -153,7 +168,7 @@ Page({
             },
             fail(res){
 
-                console.log('getStoryList fail', res.data)
+                // console.log('getStoryList fail', res.data)
             },
         })
      },
@@ -162,7 +177,7 @@ Page({
         API.Request({
             url: API.PVP_MEMBER_CHECK,
             success: function (res) {
-                console.log(res.data)
+                // console.log(res.data)
                 APP.globalData.isMember = res.data.is_member
                 GP.setData({
                     isMember: res.data.is_member,

@@ -1,7 +1,5 @@
 
 <import src="../../template/template.wxml"/>
-
-
 <scroll-view scroll-y style='height:100vh'>
     
      <view style='height:10px;' class='bg_white'></view> 

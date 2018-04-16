@@ -20,7 +20,7 @@ module.exports = new (function () {
         var JMessage = require('jmessage-sdk-web.1.4.0.min.js');
         // var JMessage = require('jmessage-wxapplet-sdk-1.4.0.min.js');
         jim = new JMessage({
-          // debug: true
+          debug: false
         });
         this.JIM = jim;
         this.gid = 10260372;
@@ -31,9 +31,9 @@ module.exports = new (function () {
           // self.reg(username, password)
           self.login(function(){},function(){})
           self.listenMsg();
-          console.log('初始化成功！');
+        //   console.log('初始化成功！');
         }, function (data) {
-            console.log("11"+data);
+            // console.log("11"+data);
         });
     };
     //极光im初始化
@@ -70,7 +70,7 @@ module.exports = new (function () {
           'username': username,
           'password': password
         }).onSuccess(cb).onFail(function (data) {
-          console.log(data)
+        //   console.log(data)
             if (data.code == 882002) {
                 cb();
             } else {
@@ -88,9 +88,9 @@ module.exports = new (function () {
           }).onSuccess(function(){
             cb();
             jim.getConversation().onSuccess(function (data) {
-              console.log('conversiontoin:' + JSON.stringify(data));
+            //   console.log('conversiontoin:' + JSON.stringify(data));
             }).onFail(function (data) {
-              console.log('error:' + JSON.stringify(data));
+            //   console.log('error:' + JSON.stringify(data));
             });
           }).onFail(cfb);
         },

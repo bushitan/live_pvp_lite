@@ -29,7 +29,8 @@
                     src="{{liveConfig.studentPlayer}}" 
                     width="{{stage.player_width}}" 
                     height="{{stage.player_height}}" 
-                    coverImage="{{stage.player_image}}" >
+                    coverImage="{{stage.player_image}}" 
+                >
                 </xx-live-player> 
             </view> 
             <!-- 推流 -->
@@ -40,7 +41,8 @@
                     width="{{stage.pusher_width}}" 
                     height="{{stage.pusher_height}}" 
                     menu="{{false}}" 
-                    coverImage="{{stage.pusher_image}}">
+                    coverImage="{{stage.pusher_image}}"
+                >
                 </xx-live-pusher> 
             </view>
         </view>        
